@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cardStyles from '@styles/Cards.module.css';
+
 
 function LeadCard({ lead, onDelete, isAdmin }) {
   return (
-    <li>
+    <li className={styles.card}>
       {lead.name} ({lead.status})
       {isAdmin && onDelete && <button onClick={() => onDelete(lead.id)}>Delete</button>}
     </li>

@@ -1,0 +1,153 @@
+/* ============================================
+   Layout.css - Layout System & Main Structure
+   ============================================ */
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.app-shell__sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-sticky);
+  height: 100vh;
+  width: var(--sidebar-width);
+  transition: width var(--transition-base);
+}
+
+.app-shell__main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left var(--transition-base);
+}
+
+.app-shell__content {
+  flex: 1;
+  padding: 0;
+  width: 100%;
+}
+
+/* Collapsed State */
+.app-shell--collapsed .app-shell__sidebar {
+  width: var(--sidebar-width-collapsed);
+}
+
+.app-shell--collapsed .app-shell__main {
+  margin-left: var(--sidebar-width-collapsed);
+}
+
+/* Main Content */
+.main-content {
+  padding: var(--space-6);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* ============================================
+   GRID SYSTEMS
+   ============================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap);
+  margin-bottom: var(--space-8);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: var(--space-8);
+}
+
+.content-grid__item--12 { grid-column: span 12; }
+.content-grid__item--9 { grid-column: span 9; }
+.content-grid__item--8 { grid-column: span 8; }
+.content-grid__item--6 { grid-column: span 6; }
+.content-grid__item--4 { grid-column: span 4; }
+.content-grid__item--3 { grid-column: span 3; }
+
+/* Dashboard Grid */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gap);
+}
+
+.dash-col-12 { grid-column: span 12; }
+.dash-col-9 { grid-column: span 9; }
+.dash-col-8 { grid-column: span 8; }
+.dash-col-6 { grid-column: span 6; }
+.dash-col-4 { grid-column: span 4; }
+.dash-col-3 { grid-column: span 3; }
+
+/* ============================================
+   RESPONSIVE DESIGN - SIMPLE FIX
+   ============================================ */
+@media (max-width: 1200px) {
+  .content-grid__item--8 { grid-column: span 12; }
+  .content-grid__item--4 { grid-column: span 12; }
+  .dash-col-8 { grid-column: span 12; }
+  .dash-col-4 { grid-column: span 12; }
+}
+
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .content-grid__item--12,
+  .content-grid__item--9,
+  .content-grid__item--8,
+  .content-grid__item--6,
+  .content-grid__item--4,
+  .content-grid__item--3 {
+    grid-column: span 1;
+  }
+  
+  .dash-col-12,
+  .dash-col-9,
+  .dash-col-8,
+  .dash-col-6,
+  .dash-col-4,
+  .dash-col-3 {
+    grid-column: span 12;
+  }
+}
+
+/* Simple mobile fix */
+@media (max-width: 768px) {
+  .app-shell__sidebar {
+    width: var(--sidebar-width-collapsed);
+  }
+  
+  .app-shell__main {
+    margin-left: var(--sidebar-width-collapsed);
+  }
+  
+  .main-content,
+  .app-shell__content {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content,
+  .app-shell__content {
+    padding: var(--space-2);
+  }
+}
