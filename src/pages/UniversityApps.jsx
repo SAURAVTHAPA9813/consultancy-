@@ -281,613 +281,95 @@ export default function UniversityApps() {
 
   if (loading) {
     return (
-      <div className="university-apps-page">
-        <div className="loading-state">
-          <Icon name="clock" size={24} />
-          <p>Loading applications...</p>
+      <div className="aetherial-background">
+        <style>{AETHERIAL_CSS}</style>
+        <div className="aetherial-content">
+          <div className="loading-state">
+            <Icon name="clock" size={48} />
+            <p>Loading applications...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <>
-      <style>{`
-        .university-apps-page {
-          padding: 1.5rem;
-          max-width: 1600px;
-          margin: 0 auto;
-          background: #f8fafc;
-          min-height: calc(100vh - 120px);
-        }
-
-        .page-header {
-          background: white;
-          padding: 2rem;
-          border-radius: 12px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          border: 1px solid #e2e8f0;
-          margin-bottom: 2rem;
-        }
-
-        .page-title {
-          margin: 0 0 0.5rem 0;
-          font-size: 1.875rem;
-          font-weight: 700;
-          color: #1e293b;
-          letter-spacing: -0.025em;
-        }
-
-        .page-subtitle {
-          margin: 0 0 1.5rem 0;
-          color: #64748b;
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-
-        .controls-section {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 1rem;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 1.5rem;
-        }
-
-        .filters-group {
-          display: flex;
-          gap: 0.75rem;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .filter-select, .search-input {
-          padding: 0.75rem 1rem;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
-          background: white;
-          color: #374151;
-          font-size: 0.875rem;
-          font-weight: 500;
-          transition: all 0.15s ease;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .search-input {
-          min-width: 250px;
-        }
-
-        .filter-select:focus, .search-input:focus {
-          outline: none;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .view-toggle {
-          display: flex;
-          background: white;
-          border-radius: 8px;
-          border: 1px solid #d1d5db;
-          padding: 0.25rem;
-        }
-
-        .view-toggle-btn {
-          padding: 0.5rem 1rem;
-          border: none;
-          background: none;
-          color: #64748b;
-          font-size: 0.875rem;
-          cursor: pointer;
-          border-radius: 6px;
-          transition: all 0.15s ease;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .view-toggle-btn--active {
-          background: #3b82f6;
-          color: white;
-        }
-
-        .stats-overview {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-          margin-bottom: 2rem;
-        }
-
-        .stat-card {
-          background: white;
-          padding: 1.5rem;
-          border-radius: 8px;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-          font-size: 2rem;
-          font-weight: 700;
-          color: #1e293b;
-          margin: 0 0 0.25rem 0;
-        }
-
-        .stat-label {
-          font-size: 0.875rem;
-          color: #64748b;
-          margin: 0;
-        }
-
-        /* Applications Grid/List */
-        .applications-container {
-          background: white;
-          border-radius: 12px;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-        }
-
-        .applications-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-          gap: 1.5rem;
-          padding: 1.5rem;
-        }
-
-        .application-card {
-          background: white;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          padding: 1.5rem;
-          cursor: pointer;
-          transition: all 0.15s ease;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .application-card:hover {
-          border-color: #3b82f6;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          transform: translateY(-2px);
-        }
-
-        .card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 1rem;
-          gap: 1rem;
-        }
-
-        .card-title {
-          margin: 0 0 0.25rem 0;
-          font-size: 1.1rem;
-          font-weight: 700;
-          color: #1e293b;
-          line-height: 1.3;
-        }
-
-        .card-subtitle {
-          margin: 0 0 0.5rem 0;
-          font-size: 0.9rem;
-          color: #64748b;
-          font-weight: 500;
-        }
-
-        .card-student {
-          margin: 0;
-          font-size: 0.85rem;
-          color: #94a3b8;
-        }
-
-        .status-badge {
-          padding: 0.375rem 0.75rem;
-          border-radius: 6px;
-          font-size: 0.75rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          flex-shrink: 0;
-        }
-
-        .deadline-section {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
-          background: #f8fafc;
-          border-radius: 6px;
-          border: 1px solid #e2e8f0;
-        }
-
-        .deadline-label {
-          font-size: 0.8rem;
-          color: #64748b;
-          font-weight: 600;
-        }
-
-        .deadline-value {
-          font-size: 0.85rem;
-          font-weight: 700;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .progress-section {
-          margin-bottom: 1rem;
-        }
-
-        .progress-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 0.5rem;
-        }
-
-        .progress-label {
-          font-size: 0.85rem;
-          color: #374151;
-          font-weight: 600;
-        }
-
-        .progress-count {
-          font-size: 0.8rem;
-          color: #64748b;
-        }
-
-        .progress-bar {
-          width: 100%;
-          height: 6px;
-          background: #e2e8f0;
-          border-radius: 3px;
-          overflow: hidden;
-        }
-
-        .progress-fill {
-          height: 100%;
-          background: #10b981;
-          transition: width 0.3s ease;
-        }
-
-        .card-meta {
-          display: flex;
-          gap: 1rem;
-          margin-top: 1rem;
-          padding-top: 1rem;
-          border-top: 1px solid #e2e8f0;
-          font-size: 0.8rem;
-          color: #64748b;
-        }
-
-        .meta-item {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-
-        /* Application Detail Modal */
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.6);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-
-        .modal {
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-          width: 100%;
-          max-width: 800px;
-          max-height: 90vh;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .modal-header {
-          padding: 1.5rem;
-          border-bottom: 1px solid #e2e8f0;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .modal-title {
-          margin: 0;
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: #1e293b;
-        }
-
-        .modal-close {
-          background: none;
-          border: none;
-          color: #64748b;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.15s ease;
-        }
-
-        .modal-close:hover {
-          background: #f9fafb;
-          color: #1e293b;
-        }
-
-        .modal-body {
-          padding: 1.5rem;
-          overflow-y: auto;
-          flex: 1;
-        }
-
-        .modal-section {
-          margin-bottom: 2rem;
-        }
-
-        .modal-section-title {
-          margin: 0 0 1rem 0;
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: #1e293b;
-        }
-
-        .requirements-grid {
-          display: grid;
-          gap: 0.75rem;
-        }
-
-        .requirement-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0.75rem;
-          background: #f8fafc;
-          border-radius: 6px;
-          border: 1px solid #e2e8f0;
-        }
-
-        .requirement-left {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          flex: 1;
-        }
-
-        .requirement-checkbox {
-          width: 18px;
-          height: 18px;
-          border: 2px solid #d1d5db;
-          border-radius: 4px;
-          background: white;
-          cursor: pointer;
-          transition: all 0.15s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .requirement-checkbox--checked {
-          background: #10b981;
-          border-color: #10b981;
-          color: white;
-        }
-
-        .requirement-info {
-          flex: 1;
-        }
-
-        .requirement-name {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: #1e293b;
-          margin: 0 0 0.25rem 0;
-          text-transform: capitalize;
-        }
-
-        .requirement-notes {
-          font-size: 0.8rem;
-          color: #64748b;
-          margin: 0;
-        }
-
-        .requirement-date {
-          font-size: 0.75rem;
-          color: #94a3b8;
-          text-align: right;
-        }
-
-        .status-timeline {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .timeline-item {
-          display: flex;
-          gap: 0.75rem;
-          align-items: flex-start;
-        }
-
-        .timeline-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #3b82f6;
-          margin-top: 0.5rem;
-          flex-shrink: 0;
-        }
-
-        .timeline-content {
-          flex: 1;
-        }
-
-        .timeline-date {
-          font-size: 0.75rem;
-          color: #94a3b8;
-          margin: 0 0 0.25rem 0;
-        }
-
-        .timeline-note {
-          font-size: 0.85rem;
-          color: #1e293b;
-          margin: 0;
-        }
-
-        .empty-state {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 3rem 2rem;
-          color: #94a3b8;
-          text-align: center;
-        }
-
-        .loading-state {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 3rem 2rem;
-          color: #64748b;
-        }
-
-        .loading-state svg {
-          animation: spin 1s linear infinite;
-          margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .university-apps-page {
-            padding: 1rem;
-          }
-
-          .page-header {
-            padding: 1.5rem;
-          }
-
-          .controls-section {
-            flex-direction: column;
-            align-items: stretch;
-          }
-
-          .filters-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.75rem;
-          }
-
-          .search-input {
-            min-width: unset;
-          }
-
-          .applications-grid {
-            grid-template-columns: 1fr;
-            padding: 1rem;
-          }
-
-          .stats-overview {
-            grid-template-columns: repeat(2, 1fr);
-          }
-
-          .card-meta {
-            flex-direction: column;
-            gap: 0.5rem;
-          }
-
-          .modal {
-            margin: 0.5rem;
-            max-height: 95vh;
-          }
-        }
-      `}</style>
-
-      <div className="university-apps-page">
+    <div className="aetherial-background">
+      <style>{AETHERIAL_CSS}</style>
+      
+      <div className="aetherial-content">
         {/* Page Header */}
-        <div className="page-header">
-          <h1 className="page-title">University Applications</h1>
-          <p className="page-subtitle">
-            Track application progress, deadlines, and requirements for all university applications
-          </p>
-          
-          {/* Controls */}
-          <div className="controls-section">
-            <div className="filters-group">
-              <select
-                className="filter-select"
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-              >
-                <option value="all">All Statuses</option>
-                {statuses.map(status => (
-                  <option key={status} value={status}>
-                    {statusConfig[status].label}
-                  </option>
-                ))}
-              </select>
+        <div className="glass-card">
+          <div className="glass-card-content">
+            <h1 className="page-title">University Applications</h1>
+            <p className="page-subtitle">
+              Track application progress, deadlines, and requirements for all university applications
+            </p>
+            
+            {/* Controls */}
+            <div className="controls-section">
+              <div className="filters-group">
+                <select
+                  className="glass-select"
+                  value={filters.status}
+                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                >
+                  <option value="all">All Statuses</option>
+                  {statuses.map(status => (
+                    <option key={status} value={status}>
+                      {statusConfig[status].label}
+                    </option>
+                  ))}
+                </select>
 
-              <select
-                className="filter-select"
-                value={filters.country}
-                onChange={(e) => setFilters(prev => ({ ...prev, country: e.target.value }))}
-              >
-                <option value="all">All Countries</option>
-                {countries.map(country => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+                <select
+                  className="glass-select"
+                  value={filters.country}
+                  onChange={(e) => setFilters(prev => ({ ...prev, country: e.target.value }))}
+                >
+                  <option value="all">All Countries</option>
+                  {countries.map(country => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
 
-              <select
-                className="filter-select"
-                value={filters.deadline}
-                onChange={(e) => setFilters(prev => ({ ...prev, deadline: e.target.value }))}
-              >
-                <option value="all">All Deadlines</option>
-                <option value="overdue">Overdue</option>
-                <option value="urgent">Urgent (≤ 7 days)</option>
-              </select>
+                <select
+                  className="glass-select"
+                  value={filters.deadline}
+                  onChange={(e) => setFilters(prev => ({ ...prev, deadline: e.target.value }))}
+                >
+                  <option value="all">All Deadlines</option>
+                  <option value="overdue">Overdue</option>
+                  <option value="urgent">Urgent (≤ 7 days)</option>
+                </select>
 
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search applications..."
-                value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              />
-            </div>
+                <input
+                  type="text"
+                  className="glass-input search-input"
+                  placeholder="Search applications..."
+                  value={filters.search}
+                  onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                />
+              </div>
 
-            <div className="view-toggle">
-              <button
-                className={`view-toggle-btn ${viewMode === 'cards' ? 'view-toggle-btn--active' : ''}`}
-                onClick={() => setViewMode('cards')}
-              >
-                <Icon name="squares-2x2" size={16} />
-                Cards
-              </button>
-              <button
-                className={`view-toggle-btn ${viewMode === 'list' ? 'view-toggle-btn--active' : ''}`}
-                onClick={() => setViewMode('list')}
-              >
-                <Icon name="list-bullet" size={16} />
-                List
-              </button>
+              <div className="view-toggle">
+                <button
+                  className={`view-toggle-btn ${viewMode === 'cards' ? 'view-toggle-btn--active' : ''}`}
+                  onClick={() => setViewMode('cards')}
+                >
+                  <Icon name="squares-2x2" size={16} />
+                  Cards
+                </button>
+                <button
+                  className={`view-toggle-btn ${viewMode === 'list' ? 'view-toggle-btn--active' : ''}`}
+                  onClick={() => setViewMode('list')}
+                >
+                  <Icon name="list-bullet" size={16} />
+                  List
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -899,19 +381,19 @@ export default function UniversityApps() {
             <p className="stat-label">Total Applications</p>
           </div>
           <div className="stat-card">
-            <h3 className="stat-number" style={{ color: '#f59e0b' }}>
+            <h3 className="stat-number stat-number--warning">
               {applications.filter(app => app.status === 'in-progress').length}
             </h3>
             <p className="stat-label">In Progress</p>
           </div>
           <div className="stat-card">
-            <h3 className="stat-number" style={{ color: '#10b981' }}>
+            <h3 className="stat-number stat-number--success">
               {applications.filter(app => app.status === 'submitted').length}
             </h3>
             <p className="stat-label">Submitted</p>
           </div>
           <div className="stat-card">
-            <h3 className="stat-number" style={{ color: '#dc2626' }}>
+            <h3 className="stat-number stat-number--danger">
               {applications.filter(app => {
                 const deadline = getDeadlineStatus(app.applicationDeadline);
                 return deadline.urgent || deadline.status === 'overdue';
@@ -922,7 +404,7 @@ export default function UniversityApps() {
         </div>
 
         {/* Applications */}
-        <div className="applications-container">
+        <div className="glass-card">
           {filteredApplications.length > 0 ? (
             <div className="applications-grid">
               {filteredApplications.map(app => {
@@ -937,7 +419,7 @@ export default function UniversityApps() {
                     onClick={() => setSelectedApp(app)}
                   >
                     <div className="card-header">
-                      <div>
+                      <div className="card-header-left">
                         <h3 className="card-title">{app.university}</h3>
                         <p className="card-subtitle">{app.program}</p>
                         <p className="card-student">{app.studentName}</p>
@@ -999,7 +481,7 @@ export default function UniversityApps() {
             </div>
           ) : (
             <div className="empty-state">
-              <Icon name="document-text" size={48} style={{ opacity: 0.5, marginBottom: '1rem' }} />
+              <Icon name="document-text" size={48} />
               <h3>No applications found</h3>
               <p>Try adjusting your filters to see more results</p>
             </div>
@@ -1009,46 +491,46 @@ export default function UniversityApps() {
         {/* Application Detail Modal */}
         {selectedApp && (
           <div className="modal-overlay" onClick={() => setSelectedApp(null)}>
-            <div className="modal" onClick={e => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3 className="modal-title">
+            <div className="glass-modal" onClick={e => e.stopPropagation()}>
+              <div className="glass-modal-header">
+                <h3 className="glass-modal-title">
                   {selectedApp.university} - {selectedApp.program}
                 </h3>
                 <button 
-                  className="modal-close"
+                  className="glass-modal-close"
                   onClick={() => setSelectedApp(null)}
                 >
                   <Icon name="x-mark" size={20} />
                 </button>
               </div>
 
-              <div className="modal-body">
+              <div className="glass-modal-body">
                 {/* Application Info */}
                 <div className="modal-section">
                   <h4 className="modal-section-title">Application Details</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                    <div>
+                  <div className="application-details-grid">
+                    <div className="detail-item">
                       <strong>Student:</strong> {selectedApp.studentName}
                     </div>
-                    <div>
+                    <div className="detail-item">
                       <strong>Country:</strong> {selectedApp.country}
                     </div>
-                    <div>
+                    <div className="detail-item">
                       <strong>Deadline:</strong> {selectedApp.applicationDeadline}
                     </div>
-                    <div>
+                    <div className="detail-item">
                       <strong>Status:</strong> {statusConfig[selectedApp.status].label}
                     </div>
-                    <div>
+                    <div className="detail-item">
                       <strong>Application Fee:</strong> ${selectedApp.applicationFee} 
                       {selectedApp.feePaid ? ' (Paid)' : ' (Pending)'}
                     </div>
-                    <div>
+                    <div className="detail-item">
                       <strong>Consultant:</strong> {selectedApp.consultant}
                     </div>
                   </div>
                   {selectedApp.notes && (
-                    <div style={{ marginTop: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '6px' }}>
+                    <div className="notes-section">
                       <strong>Notes:</strong> {selectedApp.notes}
                     </div>
                   )}
@@ -1102,6 +584,793 @@ export default function UniversityApps() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
+
+// Aetherial Glass Design System CSS
+const AETHERIAL_CSS = `
+/* ===== AETHERIAL GLASS DESIGN SYSTEM ===== */
+:root {
+  /* Primary Colors */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  
+  /* Secondary Colors */
+  --secondary: #8b5cf6;
+  --secondary-light: #a78bfa;
+  
+  /* State Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #06b6d4;
+  
+  /* Background Colors */
+  --dark: #0f172a;
+  --dark-secondary: #1e293b;
+  --dark-tertiary: #334155;
+  
+  /* Glass/Surface Colors */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-bg-light: rgba(30, 41, 59, 0.4);
+  --glass-bg-lighter: rgba(51, 65, 85, 0.3);
+  
+  /* Text Colors */
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  /* Border & Effects */
+  --border: rgba(148, 163, 184, 0.1);
+  --glass-border: rgba(148, 163, 184, 0.15);
+  --glass-border-hover: rgba(148, 163, 184, 0.3);
+  
+  /* Shadows */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+  --shadow-glow-secondary: 0 0 40px rgba(139, 92, 246, 0.3);
+  --shadow-glow-success: 0 0 40px rgba(16, 185, 129, 0.3);
+  
+  /* Animations */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Background Container */
+.aetherial-background {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Background Orbs */
+.aetherial-background::before,
+.aetherial-background::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.3;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.aetherial-background::before {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  top: -300px;
+  right: -300px;
+  animation-delay: 0s;
+}
+
+.aetherial-background::after {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  bottom: -250px;
+  left: -250px;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-50px) rotate(120deg); }
+  66% { transform: translateY(25px) rotate(240deg); }
+}
+
+/* Main Content Container */
+.aetherial-content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Glass Cards */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 2rem;
+  transition: var(--transition);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--glass-border-hover);
+}
+
+.glass-card-content {
+  padding: 2rem;
+}
+
+/* Header Styles */
+.page-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary-light) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+  margin: 0 0 2rem 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Controls */
+.controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.filters-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Form Elements */
+.glass-input, .glass-select {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.glass-input:focus, .glass-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.glass-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input {
+  min-width: 250px;
+}
+
+/* View Toggle */
+.view-toggle {
+  display: flex;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(20px);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  padding: 0.25rem;
+}
+
+.view-toggle-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.view-toggle-btn--active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Statistics Overview */
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--glass-border-hover);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary-light) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 0.5rem 0;
+  display: block;
+}
+
+.stat-number--warning {
+  background: linear-gradient(135deg, var(--warning) 0%, #fb923c 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-number--success {
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-number--danger {
+  background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Applications Grid */
+.applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.application-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.application-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-4px);
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.card-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.card-subtitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.card-student {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.status-badge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Deadline Section */
+.deadline-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--glass-bg-lighter);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+}
+
+.deadline-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.deadline-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Progress Section */
+.progress-section {
+  margin-bottom: 1rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-label {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.progress-count {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--glass-bg-lighter);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success) 0%, #059669 100%);
+  transition: width 0.3s ease;
+}
+
+/* Card Meta */
+.card-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.glass-modal {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.glass-modal-header {
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.glass-modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary-light) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.glass-modal-close:hover {
+  background: var(--glass-bg-light);
+  color: var(--text);
+}
+
+.glass-modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Modal Sections */
+.modal-section {
+  margin-bottom: 2rem;
+}
+
+.modal-section-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.application-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detail-item {
+  color: var(--text-secondary);
+}
+
+.detail-item strong {
+  color: var(--text);
+}
+
+.notes-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--glass-bg-lighter);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.notes-section strong {
+  color: var(--text);
+}
+
+/* Requirements Grid */
+.requirements-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--glass-bg-lighter);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  transition: var(--transition);
+}
+
+.requirement-item:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.requirement-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.requirement-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--glass-border);
+  border-radius: 4px;
+  background: var(--glass-bg-light);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.requirement-checkbox--checked {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.requirement-info {
+  flex: 1;
+}
+
+.requirement-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.25rem 0;
+  text-transform: capitalize;
+}
+
+.requirement-notes {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.requirement-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Status Timeline */
+.status-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem 0;
+}
+
+.timeline-note {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin: 0;
+}
+
+/* States */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state h3 {
+  color: var(--text);
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.loading-state p {
+  margin: 1rem 0 0 0;
+  font-size: 1.1rem;
+}
+
+/* Scrollbar Styling */
+.glass-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.glass-modal-body::-webkit-scrollbar-track {
+  background: var(--glass-bg-lighter);
+  border-radius: 3px;
+}
+
+.glass-modal-body::-webkit-scrollbar-thumb {
+  background: var(--glass-border-hover);
+  border-radius: 3px;
+}
+
+.glass-modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .aetherial-content {
+    padding: 1rem;
+  }
+
+  .controls-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filters-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .search-input {
+    min-width: unset;
+  }
+
+  .applications-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .stats-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .glass-modal {
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+
+  .glass-modal-header,
+  .glass-modal-body {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .application-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1400px) {
+  .aetherial-content {
+    max-width: 1800px;
+    padding: 2.5rem;
+  }
+
+  .applications-grid {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 2rem;
+  }
+}
+`;

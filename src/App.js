@@ -43,17 +43,52 @@ import Unauthorized from './pages/Unauthorized.jsx';
  // Import Global CSS
 import './styles/App.css';
 
-// Component to handle root route logic
+// 🔧 FIXED: Role-based root route logic
 function RootRoute() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   
-  // If authenticated, redirect to dashboard
-  if (isAuthenticated) {
+  // If not authenticated, show homepage
+  if (!isAuthenticated) {
+    return <HomePage />;
+  }
+  
+  // 🎯 KEY FIX: Role-based redirection for authenticated users
+  switch (user?.role) {
+    case 'admin':
+      return <Navigate to="/admin" replace />;
+    case 'consultant':
+    case 'client':
+    case 'student':
+      return <Navigate to="/dashboard" replace />;
+    default:
+      // Unknown role, redirect to login for safety
+      return <Navigate to="/login" replace />;
+  }
+}
+
+// 🔧 FIXED: Role-based dashboard route component
+function DashboardRoute() {
+  const { user } = useAuth();
+  
+  // Prevent admin from accessing regular dashboard
+  if (user?.role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
+  
+  // Allow other roles to access regular dashboard
+  return <Dashboard />;
+}
+
+// 🔧 FIXED: Admin dashboard route component
+function AdminRoute() {
+  const { user } = useAuth();
+  
+  // Only admin can access admin dashboard
+  if (user?.role !== 'admin') {
     return <Navigate to="/dashboard" replace />;
   }
   
-  // If not authenticated, show homepage
-  return <HomePage />;
+  return <AdminDashboard />;
 }
 
 function AppRoutes() {
@@ -69,8 +104,19 @@ function AppRoutes() {
       
       {/* Protected routes - require authentication */}
       <Route element={<ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}><Layout /></ProtectedRoute>}>
-        {/* Dashboard - accessible to all authenticated users */}
-        <Route path="dashboard" element={<Dashboard />} />
+        
+        {/* 🎯 KEY FIX: Role-specific dashboard routes */}
+        <Route path="dashboard" element={
+          <ProtectedRoute allowedRoles={['consultant', 'student', 'client']}>
+            <DashboardRoute />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="admin" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminRoute />
+          </ProtectedRoute>
+        } />
         
         {/* 🔒 STUDENT DATA - Admin & Consultant only (privacy protection) */}
         <Route path="students" element={
@@ -90,41 +136,74 @@ function AppRoutes() {
         } />
         
         {/* 📄 PERSONAL DATA - All authenticated users (students see their own data) */}
-        <Route path="documents" element={<DocumentsPage />} />
-        <Route path="messages" element={<MessagesPage />} />
-        <Route path="applications" element={<ApplicationPipeline />} />
-        <Route path="university-apps" element={<UniversityApps />} />
-        <Route path="visa-applications" element={<VisaApplications />} />
+        <Route path="documents" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <DocumentsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="messages" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <MessagesPage />
+          </ProtectedRoute>
+        } />
+        <Route path="applications" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <ApplicationPipeline />
+          </ProtectedRoute>
+        } />
+        <Route path="university-apps" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <UniversityApps />
+          </ProtectedRoute>
+        } />
+        <Route path="visa-applications" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <VisaApplications />
+          </ProtectedRoute>
+        } />
         
         {/* 👥 CONSULTANT ACCESS - All users can view consultants */}
-        <Route path="consultants" element={<Consultants />} />
-        <Route path="consultants/:id" element={<ConsultantsDetail />} />
-        <Route path="consultants/:id/schedule" element={<ConsultantSchedule />} />
+        <Route path="consultants" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <Consultants />
+          </ProtectedRoute>
+        } />
+        <Route path="consultants/:id" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <ConsultantsDetail />
+          </ProtectedRoute>
+        } />
+        <Route path="consultants/:id/schedule" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant']}>
+            <ConsultantSchedule />
+          </ProtectedRoute>
+        } />
         
-        {/* 📋 PROJECT MANAGEMENT - View: All users, Modify: Admin only */}
-        <Route path="projects" element={<Projects />} />
+        {/* 📋 PROJECT MANAGEMENT - View: All users, Modify: Admin/Consultant only */}
+        <Route path="projects" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <Projects />
+          </ProtectedRoute>
+        } />
         <Route path="projects/new" element={
-          <ProtectedRoute allowedRoles={['admin']}>
+          <ProtectedRoute allowedRoles={['admin', 'consultant']}>
             <ProjectForm />
           </ProtectedRoute>
         } />
-        <Route path="projects/:id" element={<ProjectDetail />} />
+        <Route path="projects/:id" element={
+          <ProtectedRoute allowedRoles={['admin', 'consultant', 'student', 'client']}>
+            <ProjectDetail />
+          </ProtectedRoute>
+        } />
         <Route path="projects/:id/edit" element={
-          <ProtectedRoute allowedRoles={['admin']}>
+          <ProtectedRoute allowedRoles={['admin', 'consultant']}>
             <ProjectForm />
-          </ProtectedRoute>
-        } />
-        
-        {/* 🔒 ADMIN ONLY */}
-        <Route path="admin" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminDashboard />
           </ProtectedRoute>
         } />
       </Route>
 
-      {/* Catch-all route - redirect to home */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* 🔧 FIXED: Catch-all route - role-based redirect */}
+      <Route path="*" element={<RootRoute />} />
     </Routes>
   );
 }

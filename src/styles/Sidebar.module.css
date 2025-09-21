@@ -1,5 +1,5 @@
 /* ============================================
-   Sidebar.module.css - Modern Glass Design Sidebar
+   Sidebar.module.css - Modern Glass Design Sidebar (Clean Version)
    ============================================ */
 
 /* Base Sidebar */
@@ -54,7 +54,7 @@
   66% { transform: rotate(240deg) scale(0.9); }
 }
 
-/* Header */
+/* Header - Now Clickable (COMPLETELY REWRITTEN) */
 .sidebar__header {
   position: relative;
   padding: 2rem 1.5rem;
@@ -64,6 +64,20 @@
   align-items: center;
   justify-content: space-between;
   background: rgba(30, 41, 59, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.sidebar__header:hover {
+  background: rgba(30, 41, 59, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(71, 85, 105, 0.2);
+}
+
+.sidebar__header:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.3);
 }
 
 /* Brand */
@@ -75,6 +89,8 @@
   transition: all 0.3s ease;
   padding: 0.5rem;
   border-radius: 12px;
+  position: relative;
+  z-index: 2;
 }
 
 .sidebar__brand:hover {
@@ -101,51 +117,42 @@
   filter: drop-shadow(0 2px 4px rgba(100, 116, 139, 0.3));
 }
 
-/* Toggle button */
-.sidebar__toggle {
-  position: absolute;
-  top: 1.5rem;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: rgba(30, 41, 59, 0.8);
-  backdrop-filter: blur(10px);
+/* NEW: Collapse/Expand Indicator (replaces old toggle button) */
+.sidebar__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(71, 85, 105, 0.2);
   border: 1px solid rgba(71, 85, 105, 0.3);
-  color: #94a3b8;
-  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.sidebar__toggle:hover {
-  background: rgba(30, 41, 59, 0.9);
+.sidebar__header:hover .sidebar__indicator {
+  background: rgba(71, 85, 105, 0.3);
   border-color: rgba(71, 85, 105, 0.5);
-  box-shadow: 0 4px 16px rgba(71, 85, 105, 0.2);
-  transform: translateY(-2px);
+  transform: scale(1.05);
 }
 
-.sidebar__toggle:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.3);
-}
-
-.sidebar__toggleIcon {
-  width: 20px;
-  height: 20px;
+.sidebar__indicatorIcon {
+  width: 16px;
+  height: 16px;
   color: #94a3b8;
   transition: all 0.3s ease;
 }
 
-.sidebar__toggle:hover .sidebar__toggleIcon {
+.sidebar__header:hover .sidebar__indicatorIcon {
   color: #cbd5e1;
   transform: scale(1.1);
 }
 
-.sidebar--collapsed .sidebar__toggleIcon {
+.sidebar--collapsed .sidebar__indicatorIcon {
   transform: rotate(180deg);
 }
+
+/* REMOVED: All old toggle button styles completely removed */
 
 /* Navigation */
 .sidebar__nav {
@@ -353,10 +360,17 @@
 .sidebar--collapsed .sidebar__header {
   padding: 1.5rem 0.75rem;
   justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .sidebar--collapsed .sidebar__brand {
   justify-content: center;
+}
+
+.sidebar--collapsed .sidebar__indicator {
+  position: static;
+  margin: 0;
 }
 
 .sidebar--collapsed .sidebar__brandtext,
@@ -365,11 +379,6 @@
 .sidebar--collapsed .sidebar__badge,
 .sidebar--collapsed .sidebar__footer {
   display: none;
-}
-
-.sidebar--collapsed .sidebar__toggle {
-  position: static;
-  margin: 1rem auto 0;
 }
 
 .sidebar--collapsed .sidebar__link {
@@ -436,11 +445,13 @@
   .sidebar .sidebar__header {
     padding: 1.5rem 0.75rem;
     justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
   }
   
-  .sidebar .sidebar__toggle {
+  .sidebar .sidebar__indicator {
     position: static;
-    margin: 1rem auto 0;
+    margin: 0;
   }
   
   .sidebar .nav-badge {
@@ -504,4 +515,9 @@
     opacity: 1;
     transform: translateY(-50%) translateX(0);
   }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }

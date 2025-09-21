@@ -3,11 +3,17 @@
 // Now supports: students, documents, threads, messages.
 
 const KEYS = {
-  STUDENTS: 'cms.students', // ✅ FIXED: Updated from 'cms.leads'
+  // Primary collections
+  STUDENTS: 'cms.students',
   DOCUMENTS: 'cms.documents',
   MESSAGES: 'cms.messages',
   PROJECTS: 'cms.projects',
-  CONSULTANTS: 'cms.consultants'
+  CONSULTANTS: 'cms.consultants',
+  // Legacy/aux keys used elsewhere in this file
+  LEADS: 'cms.leads',
+  DOCS: 'cms.documents',
+  THREADS: 'cms.threads',
+  MSGS: 'cms.messages'
 };
 
 const delay = (ms = 250) => new Promise(r => setTimeout(r, ms));
@@ -401,7 +407,7 @@ const messages = {
   },
 };
 
-const mockApi = { boot, leads, documents, threads, messages, consultants };
+const mockApi = { boot, students, leads, documents, threads, messages, consultants };
 export const api = mockApi;
 
 export default api;

@@ -69,7 +69,7 @@ export default function ConsultantDetail() {
           studentSatisfaction: id === '1' ? 4.8 : id === '2' ? 4.9 : 4.6,
           avgProcessingTime: id === '1' ? '3.2 weeks' : id === '2' ? '2.8 weeks' : '4.1 weeks'
         },
-      availability: {
+        availability: {
           monday: id === '1' ? ['09:00', '17:00'] : id === '2' ? ['10:00', '18:00'] : ['09:00', '16:00'],
           tuesday: id === '1' ? ['09:00', '17:00'] : id === '2' ? ['10:00', '18:00'] : ['09:00', '16:00'],
           wednesday: id === '1' ? ['09:00', '17:00'] : id === '2' ? ['10:00', '18:00'] : ['09:00', '16:00'],
@@ -178,7 +178,11 @@ export default function ConsultantDetail() {
 
   if (loading) {
     return (
-      <div className="consultant-detail">
+      <div className="consultant-detail-main">
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
         <div className="loading-state">
           <Icon name="clock" size={24} />
           <p>Loading consultant profile...</p>
@@ -189,7 +193,11 @@ export default function ConsultantDetail() {
 
   if (error || !consultant) {
     return (
-      <div className="consultant-detail">
+      <div className="consultant-detail-main">
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
         <div className="error-state">
           <Icon name="x-mark" size={24} />
           <p>{error || 'Consultant not found'}</p>
@@ -203,71 +211,154 @@ export default function ConsultantDetail() {
 
   return (
     <>
-      {/* INLINE STYLES */}
+      {/* AETHERIAL GLASS STYLES */}
       <style>{`
+        /* CSS Variables - Aetherial Glass Design System */
+        :root {
+          --primary: #6366f1;
+          --primary-light: #818cf8;
+          --primary-dark: #4f46e5;
+          --secondary: #8b5cf6;
+          --secondary-light: #a78bfa;
+          --success: #10b981;
+          --warning: #f59e0b;
+          --danger: #ef4444;
+          --info: #06b6d4;
+          --dark: #0f172a;
+          --dark-secondary: #1e293b;
+          --dark-tertiary: #334155;
+          --glass-bg: rgba(15, 23, 42, 0.6);
+          --glass-bg-light: rgba(30, 41, 59, 0.4);
+          --glass-border: rgba(148, 163, 184, 0.15);
+          --text: #e2e8f0;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+          --border: rgba(148, 163, 184, 0.1);
+          --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+          --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Animated Background */
+        .animated-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          animation: float 20s infinite ease-in-out;
+        }
+
+        .orb1 {
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+          top: -200px;
+          right: -200px;
+          opacity: 0.2;
+        }
+
+        .orb2 {
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+          bottom: -300px;
+          left: -300px;
+          opacity: 0.15;
+          animation-delay: -10s;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(30px, -30px) rotate(90deg); }
+          50% { transform: translate(-20px, 20px) rotate(180deg); }
+          75% { transform: translate(-30px, -20px) rotate(270deg); }
+        }
+
+        .consultant-detail-main {
+          min-height: 100vh;
+          background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
+          color: var(--text);
+          position: relative;
+        }
+
         .consultant-detail {
-          padding: var(--space-6, 24px);
+          padding: 2rem;
           max-width: 1400px;
           margin: 0 auto;
+          position: relative;
+          z-index: 1;
         }
 
         .detail-header {
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
-          gap: var(--space-4, 16px);
-          margin-bottom: var(--space-6, 24px);
-          padding-bottom: var(--space-4, 16px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          gap: 1rem;
+          margin-bottom: 2rem;
+          padding: 2rem;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
         }
 
         .detail-header__info {
           flex: 1;
           display: flex;
-          gap: var(--space-4, 16px);
+          gap: 1.5rem;
         }
 
         .consultant-avatar {
           width: 80px;
           height: 80px;
           border-radius: 50%;
-          background: var(--color-primary, #2563eb);
+          background: linear-gradient(135deg, var(--primary), var(--secondary));
           display: grid;
           place-items: center;
           color: white;
           font-weight: 600;
           font-size: 28px;
           flex-shrink: 0;
+          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
         }
 
         .consultant-info h1 {
-          margin: 0 0 var(--space-1, 4px) 0;
-          font-size: var(--font-2xl, 24px);
-          font-weight: var(--font-bold, 700);
-          color: var(--color-text, #111827);
+          margin: 0 0 0.5rem 0;
+          font-size: 1.75rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--secondary) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .consultant-info__subtitle {
-          margin: 0 0 var(--space-2, 8px) 0;
-          color: var(--color-text-muted, #6b7280);
-          font-size: var(--font-sm, 14px);
+          margin: 0 0 0.75rem 0;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
         }
 
         .consultant-info__meta {
           display: flex;
-          gap: var(--space-4, 16px);
+          gap: 1rem;
           flex-wrap: wrap;
           align-items: center;
         }
 
         .status-active {
-          color: #16a34a;
+          color: var(--success);
           font-weight: 500;
         }
 
         .detail-actions {
           display: flex;
-          gap: var(--space-2, 8px);
+          gap: 0.5rem;
           flex-wrap: wrap;
         }
 
@@ -276,80 +367,100 @@ export default function ConsultantDetail() {
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          padding: 0.55rem 0.85rem;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          background: var(--color-surface, #fff);
-          color: var(--color-text, #111827);
-          font-weight: var(--font-medium, 500);
+          padding: 0.75rem 1.25rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          font-weight: 500;
           cursor: pointer;
-          transition: all 0.12s ease;
+          transition: all 0.3s ease;
           text-decoration: none;
         }
 
         .action-button:hover {
-          transform: translateY(-1px);
-          background: var(--color-surface-hover, #f9fafb);
+          transform: translateY(-2px);
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
         }
 
         .action-button--primary {
-          background: var(--color-primary, #2563eb);
-          border-color: var(--color-primary, #2563eb);
-          color: var(--color-text-inverse, #fff);
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
         }
 
         .action-button--primary:hover {
-          background: var(--color-primary-dark, #1e40af);
-          border-color: var(--color-primary-dark, #1e40af);
+          background: var(--primary-dark);
+          border-color: var(--primary-dark);
         }
 
         .tabs {
           display: flex;
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
-          margin-bottom: var(--space-6, 24px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          padding: 0.5rem;
+          margin-bottom: 2rem;
+          box-shadow: var(--shadow-card);
         }
 
         .tab {
-          padding: var(--space-3, 12px) var(--space-4, 16px);
+          padding: 0.75rem 1rem;
           border: none;
           background: transparent;
-          color: var(--color-text-muted, #6b7280);
-          font-weight: var(--font-medium, 500);
+          color: var(--text-secondary);
+          font-weight: 500;
           cursor: pointer;
-          border-bottom: 2px solid transparent;
-          transition: all 0.12s ease;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          flex: 1;
+          text-align: center;
         }
 
         .tab:hover {
-          color: var(--color-text, #111827);
+          color: var(--text);
+          background: var(--glass-bg-light);
         }
 
         .tab--active {
-          color: var(--color-primary, #2563eb);
-          border-bottom-color: var(--color-primary, #2563eb);
+          color: white;
+          background: var(--primary);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .tab-content {
           display: grid;
-          gap: var(--space-6, 24px);
+          gap: 2rem;
         }
 
         .detail-grid {
           display: grid;
           grid-template-columns: 2fr 1fr;
-          gap: var(--space-6, 24px);
+          gap: 2rem;
         }
 
         .detail-card {
-          background: var(--color-surface, #fff);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-lg, 12px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
           overflow: hidden;
+          transition: all 0.3s ease;
+        }
+
+        .detail-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(99, 102, 241, 0.3);
+          box-shadow: var(--shadow-glow), var(--shadow-card);
         }
 
         .detail-card__header {
-          padding: var(--space-4, 16px) var(--space-5, 20px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          padding: 1.5rem 2rem;
+          border-bottom: 1px solid var(--glass-border);
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -357,123 +468,135 @@ export default function ConsultantDetail() {
 
         .detail-card__title {
           margin: 0;
-          font-size: var(--font-lg, 18px);
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--text);
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
 
         .detail-card__body {
-          padding: var(--space-5, 20px);
+          padding: 2rem;
         }
 
         .info-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: var(--space-4, 16px);
+          gap: 1.5rem;
         }
 
         .info-item {
           display: flex;
           flex-direction: column;
-          gap: var(--space-1, 4px);
+          gap: 0.25rem;
         }
 
         .info-item__label {
-          font-size: var(--font-xs, 12px);
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
 
         .info-item__value {
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text, #111827);
+          font-weight: 500;
+          color: var(--text);
         }
 
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: var(--space-4, 16px);
+          gap: 1rem;
         }
 
         .metric-card {
           text-align: center;
-          padding: var(--space-4, 16px);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          background: var(--color-bg, #f9fafb);
+          padding: 1.5rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+          transform: translateY(-2px);
+          border-color: var(--primary);
         }
 
         .metric-card__value {
-          font-size: var(--font-2xl, 24px);
-          font-weight: var(--font-bold, 700);
-          color: var(--color-primary, #2563eb);
-          margin: 0 0 var(--space-1, 4px) 0;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--primary);
+          margin: 0 0 0.25rem 0;
         }
 
         .metric-card__label {
-          font-size: var(--font-sm, 14px);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 0.875rem;
+          color: var(--text-secondary);
           margin: 0;
         }
 
         .metric-card--success .metric-card__value {
-          color: #16a34a;
+          color: var(--success);
         }
 
         .metric-card--warning .metric-card__value {
-          color: #ea580c;
+          color: var(--warning);
         }
 
         .tag-list {
           display: flex;
           flex-wrap: wrap;
-          gap: var(--space-2, 8px);
+          gap: 0.5rem;
         }
 
         .tag {
-          background: var(--color-bg, #f3f4f6);
-          color: var(--color-text, #374151);
-          padding: 0.25rem 0.5rem;
-          border-radius: var(--radius-sm, 6px);
-          font-size: var(--font-xs, 12px);
-          font-weight: var(--font-medium, 500);
+          background: var(--glass-bg-light);
+          color: var(--text-secondary);
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+          border: 1px solid var(--glass-border);
         }
 
         .tag--primary {
-          background: var(--color-primary, #2563eb);
+          background: var(--primary);
           color: white;
+          border-color: var(--primary);
         }
 
         .student-list {
           display: flex;
           flex-direction: column;
-          gap: var(--space-3, 12px);
+          gap: 1rem;
         }
 
         .student-item {
           display: flex;
           align-items: center;
-          gap: var(--space-3, 12px);
-          padding: var(--space-3, 12px);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          transition: all 0.12s ease;
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          transition: all 0.3s ease;
         }
 
         .student-item:hover {
-          background: var(--color-surface-hover, #f9fafb);
+          transform: translateX(4px);
+          border-color: var(--primary);
         }
 
         .student-avatar {
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: var(--color-primary, #2563eb);
+          background: linear-gradient(135deg, var(--primary), var(--secondary));
           display: grid;
           place-items: center;
           color: white;
@@ -487,51 +610,63 @@ export default function ConsultantDetail() {
         }
 
         .student-info h4 {
-          margin: 0 0 var(--space-1, 4px) 0;
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
+          margin: 0 0 0.25rem 0;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .student-info h4 a {
+          color: inherit;
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+
+        .student-info h4 a:hover {
+          color: var(--primary);
         }
 
         .student-info p {
           margin: 0;
-          font-size: var(--font-sm, 14px);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 0.875rem;
+          color: var(--text-secondary);
         }
 
         .student-actions {
           display: flex;
-          gap: var(--space-1, 4px);
+          gap: 0.5rem;
         }
 
         .btn-small {
-          padding: 0.25rem 0.5rem;
-          font-size: var(--font-xs, 12px);
-          border-radius: var(--radius-sm, 6px);
+          padding: 0.5rem 0.75rem;
+          font-size: 12px;
+          border-radius: 8px;
         }
 
         .schedule-grid {
           display: grid;
-          gap: var(--space-2, 8px);
+          gap: 0.75rem;
         }
 
         .schedule-day {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: var(--space-3, 12px);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
+          padding: 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
         }
 
         .schedule-day__name {
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text, #111827);
+          font-weight: 500;
+          color: var(--text);
           min-width: 80px;
         }
 
         .schedule-day__time {
-          color: var(--color-text-muted, #6b7280);
-          font-size: var(--font-sm, 14px);
+          color: var(--text-secondary);
+          font-size: 0.875rem;
         }
 
         .schedule-day--unavailable {
@@ -541,23 +676,31 @@ export default function ConsultantDetail() {
         .activity-list {
           display: flex;
           flex-direction: column;
-          gap: var(--space-3, 12px);
+          gap: 1rem;
         }
 
         .activity-item {
           display: flex;
-          gap: var(--space-3, 12px);
-          padding: var(--space-3, 12px);
-          border-left: 3px solid var(--color-primary, #2563eb);
-          background: var(--color-bg, #f9fafb);
-          border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-left: 3px solid var(--primary);
+          border-radius: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+          transform: translateX(4px);
+          border-color: var(--primary);
         }
 
         .activity-item__icon {
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
-          background: var(--color-primary, #2563eb);
+          background: var(--primary);
           display: grid;
           place-items: center;
           color: white;
@@ -569,14 +712,14 @@ export default function ConsultantDetail() {
         }
 
         .activity-item__message {
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text, #111827);
-          margin: 0 0 var(--space-1, 4px) 0;
+          font-weight: 500;
+          color: var(--text);
+          margin: 0 0 0.25rem 0;
         }
 
         .activity-item__time {
-          font-size: var(--font-xs, 12px);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 12px;
+          color: var(--text-muted);
           margin: 0;
         }
 
@@ -587,26 +730,33 @@ export default function ConsultantDetail() {
           justify-content: center;
           padding: 3rem 2rem;
           text-align: center;
-          color: var(--color-text-muted, #6b7280);
+          color: var(--text-secondary);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
         }
 
         .modal-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.45);
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(8px);
           display: grid;
           place-items: center;
-          padding: var(--space-6, 24px);
+          padding: 1.5rem;
           z-index: 9999;
         }
 
         .modal-content {
           width: min(500px, 86vw);
-          background: var(--color-surface, #fff);
-          color: var(--color-text, #111827);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-xl, 14px);
-          box-shadow: var(--shadow-xl, 0 20px 40px rgba(0, 0, 0, 0.18));
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          color: var(--text);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
           overflow: hidden;
         }
 
@@ -614,35 +764,50 @@ export default function ConsultantDetail() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: var(--space-4, 16px);
-          padding: var(--space-4, 16px) var(--space-5, 20px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid var(--glass-border);
+        }
+
+        .modal-header h3 {
+          margin: 0;
+          color: var(--text);
+          font-size: 1.25rem;
+          font-weight: 600;
         }
 
         .modal-close {
           appearance: none;
-          background: transparent;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          padding: 0.35rem 0.55rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 8px;
+          padding: 0.5rem;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.4rem;
+          color: var(--text-secondary);
+          transition: all 0.3s ease;
         }
 
         .modal-close:hover {
-          background: var(--color-surface-hover, #f9fafb);
+          background: var(--primary);
+          color: white;
+          border-color: var(--primary);
         }
 
         .modal-body {
-          padding: var(--space-5, 20px);
+          padding: 1.5rem;
           max-height: min(70vh, 400px);
           overflow: auto;
         }
 
         @media (max-width: 768px) {
+          .consultant-detail {
+            padding: 1rem;
+          }
+          
           .detail-grid {
             grid-template-columns: 1fr;
           }
@@ -666,163 +831,309 @@ export default function ConsultantDetail() {
         }
       `}</style>
 
-      <div className="consultant-detail">
-        {/* Header */}
-        <div className="detail-header">
-          <div className="detail-header__info">
-            <div className="consultant-avatar">
-              {consultant.name.charAt(0).toUpperCase()}
-            </div>
-            <div className="consultant-info">
-              <h1>{consultant.name}</h1>
-              <p className="consultant-info__subtitle">{consultant.education}</p>
-              <div className="consultant-info__meta">
-                <span className="status-active">Active Consultant</span>
-                <span>{consultant.assignedStudents.length} assigned students</span>
-                <span>Joined {formatDate(consultant.joinedDate)}</span>
+      <div className="consultant-detail-main">
+        {/* Animated Background */}
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
+
+        <div className="consultant-detail">
+          {/* Header */}
+          <div className="detail-header">
+            <div className="detail-header__info">
+              <div className="consultant-avatar">
+                {consultant.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="consultant-info">
+                <h1>{consultant.name}</h1>
+                <p className="consultant-info__subtitle">{consultant.education}</p>
+                <div className="consultant-info__meta">
+                  <span className="status-active">Active Consultant</span>
+                  <span>{consultant.assignedStudents.length} assigned students</span>
+                  <span>Joined {formatDate(consultant.joinedDate)}</span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="detail-actions">
-            <Link to="/consultants" className="action-button">
-              <Icon name="arrow-left" size={16} />
-              Back to Consultants
-            </Link>
             
-            {canEdit && (
-              <>
-                <button 
-                  className="action-button action-button--primary"
-                  onClick={() => setShowAssignModal(true)}
-                >
-                  <Icon name="plus" size={16} />
-                  Assign Student
-                </button>
-                
-                <Link 
-                  to={`/consultants/${consultant.id}/schedule`}
-                  className="action-button"
-                >
-                  <Icon name="calendar" size={16} />
-                  Manage Schedule
-                </Link>
-              </>
-            )}
+            <div className="detail-actions">
+              <Link to="/consultants" className="action-button">
+                <Icon name="arrow-left" size={16} />
+                Back to Consultants
+              </Link>
+              
+              {canEdit && (
+                <>
+                  <button 
+                    className="action-button action-button--primary"
+                    onClick={() => setShowAssignModal(true)}
+                  >
+                    <Icon name="plus" size={16} />
+                    Assign Student
+                  </button>
+                  
+                  <Link 
+                    to={`/consultants/${consultant.id}/schedule`}
+                    className="action-button"
+                  >
+                    <Icon name="calendar" size={16} />
+                    Manage Schedule
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Tabs */}
-        <div className="tabs">
-          <button 
-            className={`tab ${activeTab === 'overview' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            Overview
-          </button>
-          <button 
-            className={`tab ${activeTab === 'students' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('students')}
-          >
-            Assigned Students
-          </button>
-          <button 
-            className={`tab ${activeTab === 'performance' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('performance')}
-          >
-            Performance Analytics
-          </button>
-          <button 
-            className={`tab ${activeTab === 'schedule' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('schedule')}
-          >
-            Schedule & Availability
-          </button>
-        </div>
+          {/* Tabs */}
+          <div className="tabs">
+            <button 
+              className={`tab ${activeTab === 'overview' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              Overview
+            </button>
+            <button 
+              className={`tab ${activeTab === 'students' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('students')}
+            >
+              Assigned Students
+            </button>
+            <button 
+              className={`tab ${activeTab === 'performance' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('performance')}
+            >
+              Performance Analytics
+            </button>
+            <button 
+              className={`tab ${activeTab === 'schedule' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('schedule')}
+            >
+              Schedule & Availability
+            </button>
+          </div>
 
-        {/* Tab Content */}
-        <div className="tab-content">
-          {activeTab === 'overview' && (
-            <div className="detail-grid">
-              <div>
-                <div className="detail-card">
-                  <div className="detail-card__header">
-                    <h3 className="detail-card__title">
-                      <Icon name="user" size={20} />
-                      Professional Profile
-                    </h3>
-                  </div>
-                  <div className="detail-card__body">
-                    <div className="info-grid">
-                      <div className="info-item">
-                        <span className="info-item__label">Email</span>
-                        <span className="info-item__value">{consultant.email}</span>
-                      </div>
-                      <div className="info-item">
-                        <span className="info-item__label">Phone</span>
-                        <span className="info-item__value">{consultant.phone}</span>
-                      </div>
-                      <div className="info-item">
-                        <span className="info-item__label">Branch</span>
-                        <span className="info-item__value">{consultant.branch}</span>
-                      </div>
-                      <div className="info-item">
-                        <span className="info-item__label">Experience</span>
-                        <span className="info-item__value">{consultant.experience}</span>
-                      </div>
+          {/* Tab Content */}
+          <div className="tab-content">
+            {activeTab === 'overview' && (
+              <div className="detail-grid">
+                <div>
+                  <div className="detail-card">
+                    <div className="detail-card__header">
+                      <h3 className="detail-card__title">
+                        <Icon name="user" size={20} />
+                        Professional Profile
+                      </h3>
                     </div>
-
-                    <div style={{ marginTop: '1.5rem' }}>
-                      <div className="info-item">
-                        <span className="info-item__label">Specializations</span>
-                        <div className="tag-list" style={{ marginTop: '0.5rem' }}>
-                          {consultant.specializations.map((spec, index) => (
-                            <span key={index} className="tag tag--primary">{spec}</span>
-                          ))}
+                    <div className="detail-card__body">
+                      <div className="info-grid">
+                        <div className="info-item">
+                          <span className="info-item__label">Email</span>
+                          <span className="info-item__value">{consultant.email}</span>
+                        </div>
+                        <div className="info-item">
+                          <span className="info-item__label">Phone</span>
+                          <span className="info-item__value">{consultant.phone}</span>
+                        </div>
+                        <div className="info-item">
+                          <span className="info-item__label">Branch</span>
+                          <span className="info-item__value">{consultant.branch}</span>
+                        </div>
+                        <div className="info-item">
+                          <span className="info-item__label">Experience</span>
+                          <span className="info-item__value">{consultant.experience}</span>
                         </div>
                       </div>
-                    </div>
 
-                    <div style={{ marginTop: '1rem' }}>
-                      <div className="info-item">
-                        <span className="info-item__label">Expertise Areas</span>
-                        <div className="tag-list" style={{ marginTop: '0.5rem' }}>
-                          {consultant.expertise.map((exp, index) => (
-                            <span key={index} className="tag">{exp}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ marginTop: '1rem' }}>
-                      <div className="info-item">
-                        <span className="info-item__label">Languages</span>
-                        <div className="tag-list" style={{ marginTop: '0.5rem' }}>
-                          {consultant.languages.map((lang, index) => (
-                            <span key={index} className="tag">{lang}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {consultant.bio && (
                       <div style={{ marginTop: '1.5rem' }}>
                         <div className="info-item">
-                          <span className="info-item__label">Bio</span>
-                          <span className="info-item__value">{consultant.bio}</span>
+                          <span className="info-item__label">Specializations</span>
+                          <div className="tag-list" style={{ marginTop: '0.5rem' }}>
+                            {consultant.specializations.map((spec, index) => (
+                              <span key={index} className="tag tag--primary">{spec}</span>
+                            ))}
+                          </div>
                         </div>
+                      </div>
+
+                      <div style={{ marginTop: '1rem' }}>
+                        <div className="info-item">
+                          <span className="info-item__label">Expertise Areas</span>
+                          <div className="tag-list" style={{ marginTop: '0.5rem' }}>
+                            {consultant.expertise.map((exp, index) => (
+                              <span key={index} className="tag">{exp}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ marginTop: '1rem' }}>
+                        <div className="info-item">
+                          <span className="info-item__label">Languages</span>
+                          <div className="tag-list" style={{ marginTop: '0.5rem' }}>
+                            {consultant.languages.map((lang, index) => (
+                              <span key={index} className="tag">{lang}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {consultant.bio && (
+                        <div style={{ marginTop: '1.5rem' }}>
+                          <div className="info-item">
+                            <span className="info-item__label">Bio</span>
+                            <span className="info-item__value">{consultant.bio}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="detail-card">
+                    <div className="detail-card__header">
+                      <h3 className="detail-card__title">
+                        <Icon name="chart" size={20} />
+                        Quick Stats
+                      </h3>
+                    </div>
+                    <div className="detail-card__body">
+                      <div className="metrics-grid">
+                        <div className="metric-card metric-card--success">
+                          <div className="metric-card__value">{consultant.performanceMetrics.successRate}%</div>
+                          <div className="metric-card__label">Success Rate</div>
+                        </div>
+                        <div className="metric-card">
+                          <div className="metric-card__value">{consultant.performanceMetrics.activeStudents}</div>
+                          <div className="metric-card__label">Active Students</div>
+                        </div>
+                        <div className="metric-card">
+                          <div className="metric-card__value">{consultant.performanceMetrics.completedApplications}</div>
+                          <div className="metric-card__label">Completed Apps</div>
+                        </div>
+                        <div className="metric-card">
+                          <div className="metric-card__value">{consultant.performanceMetrics.avgResponseTime}</div>
+                          <div className="metric-card__label">Avg Response</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="detail-card" style={{ marginTop: '1.5rem' }}>
+                    <div className="detail-card__header">
+                      <h3 className="detail-card__title">
+                        <Icon name="activity" size={20} />
+                        Recent Activity
+                      </h3>
+                    </div>
+                    <div className="detail-card__body">
+                      <div className="activity-list">
+                        {consultant.recentActivity.map(activity => (
+                          <div key={activity.id} className="activity-item">
+                            <div className="activity-item__icon">
+                              <Icon name={
+                                activity.type === 'student_assigned' ? 'users' :
+                                activity.type === 'application_completed' ? 'check' :
+                                activity.type === 'meeting_scheduled' ? 'calendar' :
+                                'document'
+                              } size={16} />
+                            </div>
+                            <div className="activity-item__content">
+                              <p className="activity-item__message">{activity.message}</p>
+                              <p className="activity-item__time">{formatDateTime(activity.date)}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'students' && (
+              <div className="detail-card">
+                <div className="detail-card__header">
+                  <h3 className="detail-card__title">
+                    <Icon name="users" size={20} />
+                    Assigned Students ({getAssignedStudents().length})
+                  </h3>
+                  {canEdit && (
+                    <button 
+                      className="action-button action-button--primary"
+                      onClick={() => setShowAssignModal(true)}
+                    >
+                      <Icon name="plus" size={16} />
+                      Assign Student
+                    </button>
+                  )}
+                </div>
+                <div className="detail-card__body">
+                  <div className="student-list">
+                    {getAssignedStudents().map(student => (
+                      <div key={student.id} className="student-item">
+                        <div className="student-avatar">
+                          {student.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="student-info">
+                          <h4>
+                            <Link to={`/students/${student.id}`}>
+                              {student.name}
+                            </Link>
+                          </h4>
+                          <p>{student.email} • {student.intendedCountry || 'No country specified'}</p>
+                        </div>
+                        <div className="student-actions">
+                          <Link 
+                            to={`/students/${student.id}`}
+                            className="action-button btn-small"
+                          >
+                            View
+                          </Link>
+                          {canEdit && (
+                            <button 
+                              className="action-button btn-small"
+                              onClick={() => handleUnassignStudent(student.id)}
+                              style={{ color: 'var(--danger)' }}
+                            >
+                              Unassign
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {getAssignedStudents().length === 0 && (
+                      <div style={{ 
+                        padding: '3rem 1rem', 
+                        textAlign: 'center', 
+                        color: 'var(--text-secondary)' 
+                      }}>
+                        <Icon name="users" size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
+                        <p>No students assigned yet</p>
+                        {canEdit && (
+                          <button 
+                            className="action-button action-button--primary"
+                            onClick={() => setShowAssignModal(true)}
+                            style={{ marginTop: '1rem' }}
+                          >
+                            Assign First Student
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
                 </div>
               </div>
+            )}
 
+            {activeTab === 'performance' && (
               <div>
                 <div className="detail-card">
                   <div className="detail-card__header">
                     <h3 className="detail-card__title">
                       <Icon name="chart" size={20} />
-                      Quick Stats
+                      Performance Metrics
                     </h3>
                   </div>
                   <div className="detail-card__body">
@@ -832,16 +1143,32 @@ export default function ConsultantDetail() {
                         <div className="metric-card__label">Success Rate</div>
                       </div>
                       <div className="metric-card">
+                        <div className="metric-card__value">{consultant.performanceMetrics.totalStudents}</div>
+                        <div className="metric-card__label">Total Students</div>
+                      </div>
+                      <div className="metric-card">
                         <div className="metric-card__value">{consultant.performanceMetrics.activeStudents}</div>
                         <div className="metric-card__label">Active Students</div>
                       </div>
                       <div className="metric-card">
                         <div className="metric-card__value">{consultant.performanceMetrics.completedApplications}</div>
-                        <div className="metric-card__label">Completed Apps</div>
+                        <div className="metric-card__label">Completed Applications</div>
+                      </div>
+                      <div className="metric-card">
+                        <div className="metric-card__value">{consultant.performanceMetrics.pendingApplications}</div>
+                        <div className="metric-card__label">Pending Applications</div>
                       </div>
                       <div className="metric-card">
                         <div className="metric-card__value">{consultant.performanceMetrics.avgResponseTime}</div>
-                        <div className="metric-card__label">Avg Response</div>
+                        <div className="metric-card__label">Avg Response Time</div>
+                      </div>
+                      <div className="metric-card">
+                        <div className="metric-card__value">{consultant.performanceMetrics.avgProcessingTime}</div>
+                        <div className="metric-card__label">Avg Processing Time</div>
+                      </div>
+                      <div className="metric-card metric-card--success">
+                        <div className="metric-card__value">{consultant.performanceMetrics.studentSatisfaction}/5</div>
+                        <div className="metric-card__label">Student Satisfaction</div>
                       </div>
                     </div>
                   </div>
@@ -850,258 +1177,104 @@ export default function ConsultantDetail() {
                 <div className="detail-card" style={{ marginTop: '1.5rem' }}>
                   <div className="detail-card__header">
                     <h3 className="detail-card__title">
-                      <Icon name="activity" size={20} />
-                      Recent Activity
+                      <Icon name="target" size={20} />
+                      Monthly Performance
                     </h3>
                   </div>
                   <div className="detail-card__body">
-                    <div className="activity-list">
-                      {consultant.recentActivity.map(activity => (
-                        <div key={activity.id} className="activity-item">
-                          <div className="activity-item__icon">
-                            <Icon name={
-                              activity.type === 'student_assigned' ? 'users' :
-                              activity.type === 'application_completed' ? 'check' :
-                              activity.type === 'meeting_scheduled' ? 'calendar' :
-                              'document'
-                            } size={16} />
-                          </div>
-                          <div className="activity-item__content">
-                            <p className="activity-item__message">{activity.message}</p>
-                            <p className="activity-item__time">{formatDateTime(activity.date)}</p>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="metrics-grid">
+                      <div className="metric-card">
+                        <div className="metric-card__value">{consultant.performanceMetrics.monthlyTarget}</div>
+                        <div className="metric-card__label">Monthly Target</div>
+                      </div>
+                      <div className="metric-card">
+                        <div className="metric-card__value">{consultant.performanceMetrics.monthlyCompleted}</div>
+                        <div className="metric-card__label">Completed This Month</div>
+                      </div>
+                      <div className={`metric-card ${getCompletionRate() >= 100 ? 'metric-card--success' : getCompletionRate() >= 75 ? '' : 'metric-card--warning'}`}>
+                        <div className="metric-card__value">{getCompletionRate()}%</div>
+                        <div className="metric-card__label">Completion Rate</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 'students' && (
-            <div className="detail-card">
-              <div className="detail-card__header">
-                <h3 className="detail-card__title">
-                  <Icon name="users" size={20} />
-                  Assigned Students ({getAssignedStudents().length})
-                </h3>
-                {canEdit && (
-                  <button 
-                    className="action-button action-button--primary"
-                    onClick={() => setShowAssignModal(true)}
-                  >
-                    <Icon name="plus" size={16} />
-                    Assign Student
-                  </button>
-                )}
-              </div>
-              <div className="detail-card__body">
-                <div className="student-list">
-                  {getAssignedStudents().map(student => (
-                    <div key={student.id} className="student-item">
-                      <div className="student-avatar">
-                        {student.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="student-info">
-                        <h4>
-                          <Link to={`/students/${student.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            {student.name}
-                          </Link>
-                        </h4>
-                        <p>{student.email} • {student.intendedCountry || 'No country specified'}</p>
-                      </div>
-                      <div className="student-actions">
-                        <Link 
-                          to={`/students/${student.id}`}
-                          className="action-button btn-small"
-                        >
-                          View
-                        </Link>
-                        {canEdit && (
-                          <button 
-                            className="action-button btn-small"
-                            onClick={() => handleUnassignStudent(student.id)}
-                            style={{ color: '#ef4444' }}
-                          >
-                            Unassign
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {getAssignedStudents().length === 0 && (
-                    <div style={{ 
-                      padding: '3rem 1rem', 
-                      textAlign: 'center', 
-                      color: 'var(--color-text-muted, #6b7280)' 
-                    }}>
-                      <Icon name="users" size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-                      <p>No students assigned yet</p>
-                      {canEdit && (
-                        <button 
-                          className="action-button action-button--primary"
-                          onClick={() => setShowAssignModal(true)}
-                          style={{ marginTop: '1rem' }}
-                        >
-                          Assign First Student
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'performance' && (
-            <div>
+            {activeTab === 'schedule' && (
               <div className="detail-card">
                 <div className="detail-card__header">
                   <h3 className="detail-card__title">
-                    <Icon name="chart" size={20} />
-                    Performance Metrics
+                    <Icon name="calendar" size={20} />
+                    Weekly Availability
                   </h3>
+                  <Link 
+                    to={`/consultants/${consultant.id}/schedule`}
+                    className="action-button"
+                  >
+                    <Icon name="edit" size={16} />
+                    Manage Schedule
+                  </Link>
                 </div>
                 <div className="detail-card__body">
-                  <div className="metrics-grid">
-                    <div className="metric-card metric-card--success">
-                      <div className="metric-card__value">{consultant.performanceMetrics.successRate}%</div>
-                      <div className="metric-card__label">Success Rate</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.totalStudents}</div>
-                      <div className="metric-card__label">Total Students</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.activeStudents}</div>
-                      <div className="metric-card__label">Active Students</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.completedApplications}</div>
-                      <div className="metric-card__label">Completed Applications</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.pendingApplications}</div>
-                      <div className="metric-card__label">Pending Applications</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.avgResponseTime}</div>
-                      <div className="metric-card__label">Avg Response Time</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.avgProcessingTime}</div>
-                      <div className="metric-card__label">Avg Processing Time</div>
-                    </div>
-                    <div className="metric-card metric-card--success">
-                      <div className="metric-card__value">{consultant.performanceMetrics.studentSatisfaction}/5</div>
-                      <div className="metric-card__label">Student Satisfaction</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="detail-card" style={{ marginTop: '1.5rem' }}>
-                <div className="detail-card__header">
-                  <h3 className="detail-card__title">
-                    <Icon name="target" size={20} />
-                    Monthly Performance
-                  </h3>
-                </div>
-                <div className="detail-card__body">
-                  <div className="metrics-grid">
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.monthlyTarget}</div>
-                      <div className="metric-card__label">Monthly Target</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="metric-card__value">{consultant.performanceMetrics.monthlyCompleted}</div>
-                      <div className="metric-card__label">Completed This Month</div>
-                    </div>
-                    <div className={`metric-card ${getCompletionRate() >= 100 ? 'metric-card--success' : getCompletionRate() >= 75 ? '' : 'metric-card--warning'}`}>
-                      <div className="metric-card__value">{getCompletionRate()}%</div>
-                      <div className="metric-card__label">Completion Rate</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'schedule' && (
-            <div className="detail-card">
-              <div className="detail-card__header">
-                <h3 className="detail-card__title">
-                  <Icon name="calendar" size={20} />
-                  Weekly Availability
-                </h3>
-                <Link 
-                  to={`/consultants/${consultant.id}/schedule`}
-                  className="action-button"
-                >
-                  <Icon name="edit" size={16} />
-                  Manage Schedule
-                </Link>
-              </div>
-              <div className="detail-card__body">
-                <div className="schedule-grid">
-                  {Object.entries(consultant.availability).map(([day, hours]) => (
-                    <div key={day} className={`schedule-day ${!hours.length ? 'schedule-day--unavailable' : ''}`}>
-                      <div className="schedule-day__name">{getDayName(day)}</div>
-                      <div className="schedule-day__time">
-                        {hours.length ? `${hours[0]} - ${hours[1]}` : 'Unavailable'}
+                  <div className="schedule-grid">
+                    {Object.entries(consultant.availability).map(([day, hours]) => (
+                      <div key={day} className={`schedule-day ${!hours.length ? 'schedule-day--unavailable' : ''}`}>
+                        <div className="schedule-day__name">{getDayName(day)}</div>
+                        <div className="schedule-day__time">
+                          {hours.length ? `${hours[0]} - ${hours[1]}` : 'Unavailable'}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Assign Student Modal */}
+          {showAssignModal && (
+            <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>Assign Student to {consultant.name}</h3>
+                  <button className="modal-close" onClick={() => setShowAssignModal(false)}>
+                    <Icon name="x-mark" size={16} />
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div className="student-list">
+                    {availableStudents.length > 0 ? (
+                      availableStudents.map(student => (
+                        <div key={student.id} className="student-item">
+                          <div className="student-avatar">
+                            {student.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="student-info">
+                            <h4>{student.name}</h4>
+                            <p>{student.email} • {student.intendedCountry || 'No country specified'}</p>
+                          </div>
+                          <div className="student-actions">
+                            <button 
+                              className="action-button action-button--primary btn-small"
+                              onClick={() => handleAssignStudent(student.id)}
+                            >
+                              Assign
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
+                        No available students to assign
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-
-        {/* Assign Student Modal */}
-        {showAssignModal && (
-          <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Assign Student to {consultant.name}</h3>
-                <button className="modal-close" onClick={() => setShowAssignModal(false)}>
-                  <Icon name="x-mark" size={16} />
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="student-list">
-                  {availableStudents.length > 0 ? (
-                    availableStudents.map(student => (
-                      <div key={student.id} className="student-item">
-                        <div className="student-avatar">
-                          {student.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="student-info">
-                          <h4>{student.name}</h4>
-                          <p>{student.email} • {student.intendedCountry || 'No country specified'}</p>
-                        </div>
-                        <div className="student-actions">
-                          <button 
-                            className="action-button action-button--primary btn-small"
-                            onClick={() => handleAssignStudent(student.id)}
-                          >
-                            Assign
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p style={{ textAlign: 'center', color: 'var(--color-text-muted, #6b7280)' }}>
-                      No available students to assign
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

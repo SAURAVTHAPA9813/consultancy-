@@ -1,4 +1,4 @@
-// src/pages/Projects.jsx - Updated for Consultancy Business Projects
+// src/pages/Projects.jsx - Updated with Aetherial Glass Background
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Icon from '@components/Icon.jsx';
@@ -337,7 +337,13 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <section className="main-section">
+      <section className={styles['main-section']}>
+        {/* Animated Background */}
+        <div className={styles['animated-bg']}>
+          <div className={`${styles.orb} ${styles.orb1}`}></div>
+          <div className={`${styles.orb} ${styles.orb2}`}></div>
+        </div>
+
         <section className={styles.dash}>
           <div className={styles['loading-state']}>
             <Icon name="loader" size={24} />
@@ -350,7 +356,13 @@ export default function Projects() {
 
   if (error) {
     return (
-      <section className="main-section">
+      <section className={styles['main-section']}>
+        {/* Animated Background */}
+        <div className={styles['animated-bg']}>
+          <div className={`${styles.orb} ${styles.orb1}`}></div>
+          <div className={`${styles.orb} ${styles.orb2}`}></div>
+        </div>
+
         <section className={styles.dash}>
           <div className={styles['error-state']}>
             <Icon name="alert-circle" size={24} />
@@ -368,7 +380,13 @@ export default function Projects() {
   }
 
   return (
-    <section className="main-section">
+    <section className={styles['main-section']}>
+      {/* Animated Background */}
+      <div className={styles['animated-bg']}>
+        <div className={`${styles.orb} ${styles.orb1}`}></div>
+        <div className={`${styles.orb} ${styles.orb2}`}></div>
+      </div>
+
       <section className={styles.dash}>
         {/* Page Header */}
         <div className={styles['page-header']}>

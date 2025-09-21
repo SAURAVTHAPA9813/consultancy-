@@ -1,70 +1,61 @@
-/* src/styles/Projects.module.css */
-/* UPDATED with Aetherial Glass Design System */
+/* Projects.module.css with Aetherial Glass Background */
 
-/* ===== Aetherial Glass Design System Variables ===== */
+/* ===== AETHERIAL GLASS BACKGROUND SYSTEM ===== */
+/* CSS Variables - Essential Colors */
 :root {
   /* Primary Colors */
   --primary: #6366f1;
   --primary-light: #818cf8;
   --primary-dark: #4f46e5;
-  --primary-alpha: rgba(99, 102, 241, 0.2);
-
+  
   /* Secondary Colors */
   --secondary: #8b5cf6;
   --secondary-light: #a78bfa;
-
+  
   /* State Colors */
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #06b6d4;
-
+  
   /* Backgrounds */
   --dark: #0f172a;
   --dark-secondary: #1e293b;
   --dark-tertiary: #334155;
-
-  /* Glass/Surface Colors */
+  
+  /* Glass Surfaces */
   --glass-bg: rgba(15, 23, 42, 0.6);
   --glass-bg-light: rgba(30, 41, 59, 0.4);
-
+  --glass-border: rgba(148, 163, 184, 0.15);
+  
   /* Text Colors */
   --text: #e2e8f0;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-
-  /* Border & Effects */
-  --border: rgba(148, 163, 184, 0.1);
-  --glass-border: rgba(148, 163, 184, 0.15);
   
-  /* Mapped for compatibility with original class names */
-  --color-border: var(--border);
+  /* Borders & Shadows */
+  --border: rgba(148, 163, 184, 0.1);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+  
+  /* Override existing variables for compatibility */
+  --color-bg: var(--glass-bg);
+  --color-bg-hover: rgba(99, 102, 241, 0.1);
+  --color-border: var(--glass-border);
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
   --color-text-tertiary: var(--text-muted);
-  --color-bg: transparent;
-  --color-bg-hover: rgba(99, 102, 241, 0.05);
   --color-primary: var(--primary);
+  --color-primary-alpha: rgba(99, 102, 241, 0.3);
   --color-success: var(--success);
 }
 
-/* ===== MAIN SECTION WRAPPER & BACKGROUND ===== */
-.main-section {
-  padding: 2rem 1.5rem;
-  transition: padding 0.3s ease;
-  min-height: 100vh;
-  /* UPDATED */
-  background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
-  color: var(--text);
-}
-
-/* Note: For the animated orbs, you'll need to add a div in your component's JSX */
-/* e.g., <div className={styles.animatedBg}><div className={styles.orb1}></div> ... </div> */
-.animatedBg {
+/* ===== ANIMATED BACKGROUND ===== */
+.animated-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
+  pointer-events: none;
 }
 
 .orb {
@@ -100,6 +91,15 @@
   75% { transform: translate(-30px, -20px) rotate(270deg); }
 }
 
+/* ===== MAIN SECTION WITH GLASS BACKGROUND ===== */
+.main-section {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
+  color: var(--text);
+  position: relative;
+  padding: var(--space-8) var(--space-6);
+  transition: padding 0.3s ease;
+}
 
 /* Responsive padding adjustments */
 @media (max-width: 768px) {
@@ -118,26 +118,33 @@
 .dash {
   max-width: 1200px;
   margin: 0 auto;
-  position: relative; /* To appear above animated background */
+  position: relative;
   z-index: 1;
 }
 
-/* ===== PAGE HEADER ===== */
+/* ===== PAGE HEADER WITH GLASS EFFECT ===== */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 2rem 1.5rem;
+  padding: 2rem;
   margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .page-header h2 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1.75rem;
-  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--text);
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .page-header p {
@@ -151,48 +158,53 @@
   align-items: center;
 }
 
-/* ===== VIEW TOGGLE ===== */
+/* ===== VIEW TOGGLE WITH GLASS EFFECT ===== */
 .view-toggle {
   display: flex;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 6px;
+  border-radius: 12px;
   overflow: hidden;
   height: 40px;
 }
 
 .view-toggle__btn {
-  background: var(--glass-bg-light);
-  color: var(--text-secondary);
+  background: transparent;
   border: none;
   padding: 0 0.75rem;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
+  color: var(--text-secondary);
 }
 
 .view-toggle__btn:hover {
-  background: var(--color-bg-hover);
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--text);
 }
 
 .view-toggle__btn--active {
   background: var(--primary);
   color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-/* ===== PROJECTS TOOLBAR ===== */
+/* ===== PROJECTS TOOLBAR WITH GLASS EFFECT ===== */
 .projects-toolbar {
   display: flex;
-  padding: 1rem;
+  padding: 1.5rem;
   gap: 1rem;
   align-items: center;
   margin-bottom: 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
   border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
   min-height: 60px;
 }
 
@@ -216,20 +228,25 @@
   width: 100%;
   height: 40px;
   padding: 0 0.75rem 0 2.5rem;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   font-size: 0.875rem;
   line-height: 1.2;
-  transition: border-color 0.15s ease;
+  transition: all 0.3s ease;
   box-sizing: border-box;
-  background: var(--glass-bg-light);
   color: var(--text);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-alpha);
+  box-shadow: var(--shadow-glow);
 }
 
 .projects-filters {
@@ -241,20 +258,22 @@
 .filter-select {
   height: 40px;
   padding: 0 0.75rem;
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   font-size: 0.875rem;
-  background: var(--glass-bg-light);
-  color: var(--text);
   min-width: 120px;
   box-sizing: border-box;
   line-height: 1.2;
+  color: var(--text);
+  transition: all 0.3s ease;
 }
 
 .filter-select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-alpha);
+  box-shadow: var(--shadow-glow);
 }
 
 .projects-actions {
@@ -263,39 +282,44 @@
   align-items: center;
 }
 
-/* ===== PROJECTS GRID ===== */
+/* ===== PROJECTS GRID WITH GLASS EFFECT ===== */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-  padding: 0;
-  background: transparent;
-  border: none;
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
-/* ===== PROJECT CARDS (GLASSMORPHISM APPLIED) ===== */
+/* ===== GLASS PROJECT CARDS ===== */
 .dash-card {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
   border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .project-card {
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.3s ease;
 }
 
 .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: var(--shadow-glow), var(--shadow-card);
 }
 
 .dash-card__body {
-  padding: 1.75rem;
+  padding: 1.5rem;
 }
 
 .project-card__header {
@@ -321,13 +345,20 @@
   align-items: flex-start;
 }
 
-.project-card__client,
-.project-card__members {
+.project-card__type,
+.project-card__manager,
+.project-card__stat {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.project-card__stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .project-card__progress {
@@ -336,11 +367,11 @@
 
 .progress-bar {
   height: 8px;
-  background: var(--dark-tertiary);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 0.75rem;
-  border: 1px solid var(--border);
 }
 
 .progress-bar__fill {
@@ -364,8 +395,8 @@
   margin-top: auto;
 }
 
-.project-card__due,
-.project-card__tasks {
+.project-card__deadline,
+.project-card__budget {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -374,63 +405,63 @@
 .project-card__budget {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  border-top: 1px solid var(--glass-border);
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--primary);
 }
 
-/* ===== STATUS PILLS (UPDATED) ===== */
+/* ===== STATUS PILLS WITH GLASS EFFECT ===== */
 .dash-pill {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: capitalize;
+  backdrop-filter: blur(20px);
   border: 1px solid transparent;
 }
 
-.blue {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--primary-light);
-  border-color: rgba(99, 102, 241, 0.3);
+/* Status color variants */
+.dash-pill-blue, .blue {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
-.green {
-  background: rgba(16, 185, 129, 0.15);
+.dash-pill-green, .green {
+  background: rgba(16, 185, 129, 0.2);
   color: var(--success);
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-.yellow {
-  background: rgba(245, 158, 11, 0.15);
+.dash-pill-yellow, .yellow {
+  background: rgba(245, 158, 11, 0.2);
   color: var(--warning);
   border-color: rgba(245, 158, 11, 0.3);
 }
 
-.red {
-  background: rgba(239, 68, 68, 0.15);
+.dash-pill-red, .red {
+  background: rgba(239, 68, 68, 0.2);
   color: var(--danger);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-.gray {
-  background: rgba(148, 163, 184, 0.15);
+.dash-pill-gray, .gray {
+  background: var(--glass-bg-light);
   color: var(--text-secondary);
-  border-color: rgba(148, 163, 184, 0.3);
+  border-color: var(--glass-border);
 }
 
-/* ===== PROJECTS TABLE (UPDATED) ===== */
+/* ===== PROJECTS TABLE WITH GLASS EFFECT ===== */
 .projects-table-wrapper {
   overflow-x: auto;
   margin-bottom: 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
   border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .dash-table {
@@ -439,27 +470,27 @@
 }
 
 .dash-table th {
-  background: transparent;
+  background: var(--glass-bg-light);
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .dash-table td {
   padding: 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
   color: var(--text);
 }
 
 .projects-table__row {
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.3s ease;
 }
 
 .projects-table__row:hover {
-  background: var(--color-bg-hover);
+  background: rgba(99, 102, 241, 0.05);
 }
 
 .project-cell {
@@ -478,11 +509,12 @@
   font-size: 0.75rem;
 }
 
-.members-cell,
+.team-cell,
 .progress-cell {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--text-secondary);
 }
 
 .progress-cell .progress-bar {
@@ -490,16 +522,17 @@
   margin-bottom: 0;
 }
 
-/* ===== PROJECTS SUMMARY (UPDATED) ===== */
+/* ===== PROJECTS SUMMARY WITH GLASS EFFECT ===== */
 .projects-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-  padding: 1.75rem;
+  padding: 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
   border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
   margin-top: 2rem;
 }
 
@@ -511,7 +544,7 @@
   color: var(--text);
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .summary-stat {
@@ -529,21 +562,22 @@
 .summary-stat__label {
   display: block;
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--text);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* ===== EMPTY STATES (UPDATED) ===== */
+/* ===== EMPTY STATES ===== */
 .projects-empty {
   text-align: center;
   padding: 3rem 1rem;
   color: var(--text-secondary);
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
   border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .projects-empty svg {
@@ -558,6 +592,7 @@
 
 .projects-empty p {
   margin: 0 0 1.5rem 0;
+  color: var(--text-secondary);
 }
 
 /* ===== LOADING AND ERROR STATES ===== */
@@ -570,6 +605,11 @@
   padding: 3rem 2rem;
   text-align: center;
   color: var(--text-secondary);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .loading-state svg,
@@ -582,6 +622,7 @@
 .error-state p {
   margin: 0;
   font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -595,12 +636,11 @@
   
   .projects-filters {
     flex-direction: column;
-    align-items: stretch;
   }
   
   .projects-grid {
     grid-template-columns: 1fr;
-    padding: 0;
+    padding: 1rem;
   }
   
   .page-header {

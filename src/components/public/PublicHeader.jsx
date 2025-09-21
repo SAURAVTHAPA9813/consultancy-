@@ -20,7 +20,7 @@ const PublicHeader = ({ minimal = false }) => {
   {/* Logo */}
   <Link to="/" className="logo" aria-label="Home">
     <Icon name="chart" size={24} className="logo-icon" />
-    <span className="logo-text">StudyAbroad Pro</span>
+    <span className="logo-text">Consultancy</span>
   </Link>
 
   {!minimal && (

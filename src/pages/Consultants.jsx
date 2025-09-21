@@ -300,488 +300,1016 @@ export default function ConsultantList() {
 
   if (loading) {
     return (
-      <section className="consultants">
-        <div className="inbox__empty">Loading consultants...</div>
+      <section className="consultants-main">
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
+        <div className="loading-state">Loading consultants...</div>
       </section>
     );
   }
 
   return (
     <>
-      {/* ENHANCED STYLES */}
+      {/* AETHERIAL GLASS STYLES */}
       <style>{`
-        .consultants{padding:var(--space-6,24px);display:grid;gap:var(--space-6,24px);}
-        .consultants__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4,16px);}
-        .consultants__title h2{margin:0 0 var(--space-1,4px) 0;font-size:var(--font-2xl,24px);font-weight:var(--font-bold,700);color:var(--color-text,#111827);}
-        .consultants__subtitle{margin:0;color:var(--color-text-muted,#6b7280);font-size:var(--font-sm,14px);}
-        .consultants__actions{display:flex;gap:var(--space-2,8px);flex-wrap:wrap;}
+        /* CSS Variables - Aetherial Glass Design System */
+        :root {
+          --primary: #6366f1;
+          --primary-light: #818cf8;
+          --primary-dark: #4f46e5;
+          --secondary: #8b5cf6;
+          --secondary-light: #a78bfa;
+          --success: #10b981;
+          --warning: #f59e0b;
+          --danger: #ef4444;
+          --info: #06b6d4;
+          --dark: #0f172a;
+          --dark-secondary: #1e293b;
+          --dark-tertiary: #334155;
+          --glass-bg: rgba(15, 23, 42, 0.6);
+          --glass-bg-light: rgba(30, 41, 59, 0.4);
+          --glass-border: rgba(148, 163, 184, 0.15);
+          --text: #e2e8f0;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+          --border: rgba(148, 163, 184, 0.1);
+          --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+          --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
 
-        .consultants__controls{display:flex;align-items:center;gap:var(--space-4,16px);flex-wrap:wrap;margin-bottom:var(--space-4,16px);}
-        .search-input{padding:.5rem .75rem;border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);
-          background:var(--color-surface,#fff);color:var(--color-text,#111827);min-width:250px;}
-        .filter-select{padding:.5rem .75rem;border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);
-          background:var(--color-surface,#fff);color:var(--color-text,#111827);}
-        .view-toggle{display:flex;gap:4px;border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);overflow:hidden;}
-        .view-toggle button{padding:.5rem .75rem;border:none;background:var(--color-surface,#fff);cursor:pointer;transition:background .2s;}
-        .view-toggle button.active{background:var(--color-primary,#2563eb);color:white;}
+        /* Animated Background */
+        .animated-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
 
-        .consultants__stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4,16px);}
-        .dash-stat{display:flex;align-items:center;gap:var(--space-3,12px);padding:var(--space-4,16px);
-          background:var(--color-surface,#fff);border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-lg,12px);
-          box-shadow:var(--shadow-xs,0 1px 2px rgba(0,0,0,.04));}
-        .dash-stat__icon{width:40px;height:40px;display:grid;place-items:center;background:var(--color-bg,#f9fafb);
-          border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);}
-        .dash-stat__icon .icon{width:18px;height:18px;}
-        .dash-stat__meta{display:flex;flex-direction:column;gap:2px;}
-        .dash-stat__label{font-size:12px;color:var(--color-text-muted,#6b7280);}
-        .dash-stat__value{font-size:20px;font-weight:var(--font-bold,700);color:var(--color-text,#111827);}
+        .orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          animation: float 20s infinite ease-in-out;
+        }
 
-        .consultants-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:var(--space-4,16px);}
-        .consultant-card{background:var(--color-surface,#fff);border:1px solid var(--color-border,#e5e7eb);
-          border-radius:var(--radius-lg,12px);padding:var(--space-5,20px);box-shadow:var(--shadow-xs,0 1px 2px rgba(0,0,0,.04));
-          transition:transform .2s ease,box-shadow .2s ease;}
-        .consultant-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md,0 4px 6px rgba(0,0,0,.1));}
-        
-        .consultant-card__header{display:flex;align-items:center;gap:var(--space-3,12px);margin-bottom:var(--space-4,16px);}
-        .consultant-avatar{width:56px;height:56px;border-radius:50%;background:var(--color-primary,#2563eb);
-          display:grid;place-items:center;color:white;font-weight:600;font-size:20px;}
-        .consultant-info h3{margin:0 0 4px 0;font-size:var(--font-lg,18px);font-weight:600;color:var(--color-text,#111827);}
-        .consultant-info p{margin:0;font-size:14px;color:var(--color-text-muted,#6b7280);}
+        .orb1 {
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+          top: -200px;
+          right: -200px;
+          opacity: 0.2;
+        }
 
-        .consultant-card__body{margin-bottom:var(--space-4,16px);}
-        .consultant-meta{display:flex;flex-direction:column;gap:8px;}
-        .consultant-meta-item{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--color-text,#111827);}
-        
-        .specializations{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0;}
-        .specialization-tag{background:var(--color-bg,#f3f4f6);color:var(--color-text,#374151);
-          padding:2px 8px;border-radius:12px;font-size:12px;}
-        
-        .performance-metrics{background:var(--color-bg,#f9fafb);border-radius:var(--radius-md,8px);
-          padding:var(--space-3,12px);margin:var(--space-3,12px) 0;}
-        .metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-        .metric-item{text-align:center;}
-        .metric-value{font-size:18px;font-weight:600;color:var(--color-primary,#2563eb);}
-        .metric-label{font-size:11px;color:var(--color-text-muted,#6b7280);}
+        .orb2 {
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+          bottom: -300px;
+          left: -300px;
+          opacity: 0.15;
+          animation-delay: -10s;
+        }
 
-        .assigned-students{margin:var(--space-3,12px) 0;}
-        .assigned-students h4{margin:0 0 8px 0;font-size:14px;font-weight:600;}
-        .student-list{display:flex;flex-wrap:wrap;gap:4px;}
-        .student-tag{background:var(--color-primary,#2563eb);color:white;
-          padding:2px 6px;border-radius:8px;font-size:11px;}
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(30px, -30px) rotate(90deg); }
+          50% { transform: translate(-20px, 20px) rotate(180deg); }
+          75% { transform: translate(-30px, -20px) rotate(270deg); }
+        }
 
-        .consultant-card__actions{display:flex;gap:8px;justify-content:flex-end;}
-        
-        .status-active{color:#16a34a;font-weight:500;}
-        .status-inactive{color:#6b7280;font-weight:500;}
+        .consultants-main {
+          min-height: 100vh;
+          background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
+          color: var(--text);
+          position: relative;
+        }
 
-        .data-table{width:100%;border-collapse:collapse;background:var(--color-surface,#fff);
-          border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);overflow:hidden;}
-        .data-table th{background:var(--color-bg,#f9fafb);padding:var(--space-3,12px);text-align:left;
-          font-weight:var(--font-semibold,600);color:var(--color-text,#111827);border-bottom:1px solid var(--color-border,#e5e7eb);}
-        .data-table td{padding:var(--space-3,12px);border-bottom:1px solid var(--color-border,#e5e7eb);vertical-align:middle;}
-        .data-table tr:hover{background:var(--color-surface-hover,#f9fafb);}
+        .consultants {
+          padding: 2rem;
+          display: grid;
+          gap: 2rem;
+          position: relative;
+          z-index: 1;
+          max-width: 1400px;
+          margin: 0 auto;
+        }
 
-        .inbox__empty{padding:2.5rem 1rem;text-align:center;color:var(--color-text-muted,#6b7280);}
+        .consultants__header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 1rem;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          padding: 2rem;
+          box-shadow: var(--shadow-card);
+        }
 
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;
-          padding:var(--space-6,24px);z-index:9999;}
-        .modal-content{background:var(--color-surface,#fff);color:var(--color-text,#111827);
-          border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-xl,14px);
-          box-shadow:var(--shadow-xl,0 20px 40px rgba(0,0,0,.18));overflow:hidden;}
-        .modal-header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4,16px);
-          padding:var(--space-4,16px) var(--space-5,20px);border-bottom:1px solid var(--color-border,#e5e7eb);background:#f8f9fa;}
-        .modal-close{appearance:none;background:transparent;border:1px solid var(--color-border,#e5e7eb);
-          border-radius:var(--radius-md,8px);padding:.35rem .55rem;cursor:pointer;display:inline-flex;
-          align-items:center;justify-content:center;}
-        .modal-close:hover{background:var(--color-surface-hover,#f9fafb);}
+        .consultants__title h2 {
+          margin: 0 0 0.5rem 0;
+          font-size: 2rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--secondary) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
 
-        .action-button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
-          padding:.55rem .85rem;border:1px solid var(--color-border,#e5e7eb);border-radius:var(--radius-md,8px);
-          background:var(--color-surface,#fff);color:var(--color-text,#111827);font-weight:var(--font-medium,500);
-          cursor:pointer;transition:transform .12s ease, background-color .12s ease, border-color .12s ease;}
-        .action-button:hover{transform:translateY(-1px);background:var(--color-surface-hover,#f9fafb);}
-        .action-button--primary{background:var(--color-primary,#2563eb);border-color:var(--color-primary,#2563eb);color:var(--color-text-inverse,#fff);}
-        .action-button--primary:hover{background:var(--color-primary-dark,#1e40af);border-color:var(--color-primary-dark,#1e40af);}
-        .action-button--secondary{background:var(--color-bg,#f3f4f6);}
-        .action-button--danger{background:var(--color-error,#ef4444);border-color:var(--color-error,#ef4444);color:#fff;}
-        .action-button--danger:hover{background:#dc2626;border-color:#dc2626;}
-        .action-button--small{padding:.35rem .55rem;font-size:12px;}
+        .consultants__subtitle {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
+        }
 
-        @media (max-width: 960px){
-          .consultants__header{flex-direction:column;align-items:flex-start;}
-          .consultants__actions{width:100%;}
-          .consultants__controls{flex-direction:column;align-items:stretch;}
-          .consultants__stats{grid-template-columns:repeat(2,1fr);}
-          .consultants-grid{grid-template-columns:1fr;}
+        .consultants__actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .consultants__controls {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          padding: 1.5rem;
+          box-shadow: var(--shadow-card);
+        }
+
+        .search-input {
+          padding: 0.75rem 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          min-width: 250px;
+          transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+          color: var(--text-muted);
+        }
+
+        .search-input:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
+        }
+
+        .filter-select {
+          padding: 0.75rem 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
+        }
+
+        .view-toggle {
+          display: flex;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
+        .view-toggle button {
+          padding: 0.75rem;
+          border: none;
+          background: transparent;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .view-toggle button:hover {
+          background: rgba(99, 102, 241, 0.1);
+          color: var(--text);
+        }
+
+        .view-toggle button.active {
+          background: var(--primary);
+          color: white;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .consultants__stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 1rem;
+        }
+
+        .dash-stat {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.5rem;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
+          transition: all 0.3s ease;
+        }
+
+        .dash-stat:hover {
+          transform: translateY(-4px);
+          border-color: rgba(99, 102, 241, 0.3);
+          box-shadow: var(--shadow-glow), var(--shadow-card);
+        }
+
+        .dash-stat__icon {
+          width: 48px;
+          height: 48px;
+          display: grid;
+          place-items: center;
+          background: var(--glass-bg-light);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+        }
+
+        .dash-stat__icon .icon {
+          width: 20px;
+          height: 20px;
+          color: var(--primary);
+        }
+
+        .dash-stat__meta {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .dash-stat__label {
+          font-size: 12px;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .dash-stat__value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        .consultants-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .consultant-card {
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          padding: 1.5rem;
+          box-shadow: var(--shadow-card);
+          transition: all 0.3s ease;
+        }
+
+        .consultant-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(99, 102, 241, 0.3);
+          box-shadow: var(--shadow-glow), var(--shadow-card);
+        }
+
+        .consultant-card__header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .consultant-avatar {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--primary), var(--secondary));
+          display: grid;
+          place-items: center;
+          color: white;
+          font-weight: 600;
+          font-size: 20px;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .consultant-info h3 {
+          margin: 0 0 4px 0;
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .consultant-info p {
+          margin: 0;
+          font-size: 14px;
+          color: var(--text-secondary);
+        }
+
+        .consultant-card__body {
+          margin-bottom: 1.5rem;
+        }
+
+        .consultant-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .consultant-meta-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          color: var(--text-secondary);
+        }
+
+        .specializations {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin: 1rem 0;
+        }
+
+        .specialization-tag {
+          background: var(--glass-bg-light);
+          color: var(--text-secondary);
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 12px;
+          border: 1px solid var(--glass-border);
+        }
+
+        .performance-metrics {
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          padding: 1rem;
+          margin: 1rem 0;
+        }
+
+        .metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.75rem;
+        }
+
+        .metric-item {
+          text-align: center;
+        }
+
+        .metric-value {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--primary);
+        }
+
+        .metric-label {
+          font-size: 11px;
+          color: var(--text-muted);
+        }
+
+        .assigned-students {
+          margin: 1rem 0;
+        }
+
+        .assigned-students h4 {
+          margin: 0 0 8px 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .student-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+        }
+
+        .student-tag {
+          background: var(--primary);
+          color: white;
+          padding: 0.125rem 0.5rem;
+          border-radius: 8px;
+          font-size: 11px;
+        }
+
+        .consultant-card__actions {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: flex-end;
+        }
+
+        .status-active {
+          color: var(--success);
+          font-weight: 500;
+        }
+
+        .status-inactive {
+          color: var(--text-muted);
+          font-weight: 500;
+        }
+
+        .data-table {
+          width: 100%;
+          border-collapse: collapse;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
+          overflow: hidden;
+        }
+
+        .data-table th {
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+          color: var(--text);
+          border-bottom: 1px solid var(--glass-border);
+        }
+
+        .data-table td {
+          padding: 1rem;
+          border-bottom: 1px solid var(--glass-border);
+          vertical-align: middle;
+          color: var(--text);
+        }
+
+        .data-table tr:hover {
+          background: rgba(99, 102, 241, 0.05);
+        }
+
+        .loading-state, .inbox__empty {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem 2rem;
+          text-align: center;
+          color: var(--text-secondary);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
+        }
+
+        .alert {
+          padding: 12px 16px;
+          border-radius: 12px;
+          margin-bottom: 1rem;
+        }
+
+        .alert--error {
+          background: rgba(239, 68, 68, 0.2);
+          color: var(--danger);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(8px);
+          display: grid;
+          place-items: center;
+          padding: 1.5rem;
+          z-index: 9999;
+        }
+
+        .modal-content {
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          color: var(--text);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
+          overflow: hidden;
+        }
+
+        .modal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid var(--glass-border);
+          background: var(--glass-bg-light);
+        }
+
+        .modal-header h3 {
+          margin: 0;
+          color: var(--text);
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .modal-close {
+          appearance: none;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 8px;
+          padding: 0.5rem;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-secondary);
+          transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+          background: var(--primary);
+          color: white;
+          border-color: var(--primary);
+        }
+
+        .modal-body {
+          padding: 1.5rem;
+        }
+
+        .action-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.25rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-decoration: none;
+        }
+
+        .action-button:hover {
+          transform: translateY(-2px);
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
+        }
+
+        .action-button--primary {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
+        }
+
+        .action-button--primary:hover {
+          background: var(--primary-dark);
+          border-color: var(--primary-dark);
+        }
+
+        .action-button--secondary {
+          background: var(--glass-bg);
+        }
+
+        .action-button--danger {
+          background: var(--danger);
+          border-color: var(--danger);
+          color: white;
+        }
+
+        .action-button--danger:hover {
+          background: #dc2626;
+          border-color: #dc2626;
+        }
+
+        .action-button--small {
+          padding: 0.5rem 0.75rem;
+          font-size: 12px;
+        }
+
+        @media (max-width: 960px) {
+          .consultants {
+            padding: 1rem;
+          }
+          
+          .consultants__header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .consultants__actions {
+            width: 100%;
+          }
+          
+          .consultants__controls {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          
+          .consultants__stats {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          .consultants-grid {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
-      <section className="consultants">
-        {/* Header */}
-        <div className="consultants__header">
-          <div className="consultants__title">
-            <h2>Consultant Management — {branch}</h2>
-            <p className="consultants__subtitle">Manage your team of consultants with performance tracking</p>
+      <section className="consultants-main">
+        {/* Animated Background */}
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
+
+        <section className="consultants">
+          {/* Header */}
+          <div className="consultants__header">
+            <div className="consultants__title">
+              <h2>Consultant Management — {branch}</h2>
+              <p className="consultants__subtitle">Manage your team of consultants with performance tracking</p>
+            </div>
+
+            <div className="consultants__actions">
+              {canEdit && (
+                <button
+                  className="action-button action-button--primary"
+                  onClick={() => setShowForm(true)}
+                  aria-label="Add new consultant"
+                >
+                  <Icon name="users" className="icon icon--sm" decorative />
+                  Add Consultant
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="consultants__actions">
-            {canEdit && (
-              <button
-                className="action-button action-button--primary"
-                onClick={() => setShowForm(true)}
-                aria-label="Add new consultant"
+          {/* Controls */}
+          <div className="consultants__controls">
+            <input
+              type="search"
+              placeholder="Search consultants..."
+              className="search-input"
+              value={filters.search}
+              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+            />
+            
+            <select 
+              className="filter-select"
+              value={filters.specialization}
+              onChange={(e) => setFilters(prev => ({ ...prev, specialization: e.target.value }))}
+            >
+              <option value="">All Specializations</option>
+              <option value="US Universities">US Universities</option>
+              <option value="Canada Universities">Canada Universities</option>
+              <option value="Australia Universities">Australia Universities</option>
+              <option value="UK Universities">UK Universities</option>
+              <option value="Business Programs">Business Programs</option>
+              <option value="Engineering">Engineering</option>
+            </select>
+
+            <select 
+              className="filter-select"
+              value={filters.status}
+              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active Only</option>
+              <option value="inactive">Inactive Only</option>
+            </select>
+
+            <div className="view-toggle">
+              <button 
+                className={viewMode === 'cards' ? 'active' : ''}
+                onClick={() => setViewMode('cards')}
               >
-                <Icon name="users" className="icon icon--sm" decorative />
-                Add Consultant
+                <Icon name="grid" size={16} />
               </button>
-            )}
+              <button 
+                className={viewMode === 'table' ? 'active' : ''}
+                onClick={() => setViewMode('table')}
+              >
+                <Icon name="list" size={16} />
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Controls */}
-        <div className="consultants__controls">
-          <input
-            type="search"
-            placeholder="Search consultants..."
-            className="search-input"
-            value={filters.search}
-            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-          />
-          
-          <select 
-            className="filter-select"
-            value={filters.specialization}
-            onChange={(e) => setFilters(prev => ({ ...prev, specialization: e.target.value }))}
-          >
-            <option value="">All Specializations</option>
-            <option value="US Universities">US Universities</option>
-            <option value="Canada Universities">Canada Universities</option>
-            <option value="Australia Universities">Australia Universities</option>
-            <option value="UK Universities">UK Universities</option>
-            <option value="Business Programs">Business Programs</option>
-            <option value="Engineering">Engineering</option>
-          </select>
-
-          <select 
-            className="filter-select"
-            value={filters.status}
-            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active Only</option>
-            <option value="inactive">Inactive Only</option>
-          </select>
-
-          <div className="view-toggle">
-            <button 
-              className={viewMode === 'cards' ? 'active' : ''}
-              onClick={() => setViewMode('cards')}
-            >
-              <Icon name="grid" size={16} />
-            </button>
-            <button 
-              className={viewMode === 'table' ? 'active' : ''}
-              onClick={() => setViewMode('table')}
-            >
-              <Icon name="list" size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* Stats Row */}
-        <div className="consultants__stats">
-          <div className="dash-stat">
-            <div className="dash-stat__icon">
-              <Icon name="users" className="icon" decorative />
+          {/* Stats Row */}
+          <div className="consultants__stats">
+            <div className="dash-stat">
+              <div className="dash-stat__icon">
+                <Icon name="users" className="icon" decorative />
+              </div>
+              <div className="dash-stat__meta">
+                <div className="dash-stat__label">Total Consultants</div>
+                <div className="dash-stat__value">{totalCount}</div>
+              </div>
             </div>
-            <div className="dash-stat__meta">
-              <div className="dash-stat__label">Total Consultants</div>
-              <div className="dash-stat__value">{totalCount}</div>
+            <div className="dash-stat">
+              <div className="dash-stat__icon">
+                <Icon name="briefcase" className="icon" decorative />
+              </div>
+              <div className="dash-stat__meta">
+                <div className="dash-stat__label">Active</div>
+                <div className="dash-stat__value">{activeCount}</div>
+              </div>
             </div>
-          </div>
-          <div className="dash-stat">
-            <div className="dash-stat__icon">
-              <Icon name="briefcase" className="icon" decorative />
+            <div className="dash-stat">
+              <div className="dash-stat__icon">
+                <Icon name="chart" className="icon" decorative />
+              </div>
+              <div className="dash-stat__meta">
+                <div className="dash-stat__label">Avg Success Rate</div>
+                <div className="dash-stat__value">{avgSuccessRate}%</div>
+              </div>
             </div>
-            <div className="dash-stat__meta">
-              <div className="dash-stat__label">Active</div>
-              <div className="dash-stat__value">{activeCount}</div>
-            </div>
-          </div>
-          <div className="dash-stat">
-            <div className="dash-stat__icon">
-              <Icon name="chart" className="icon" decorative />
-            </div>
-            <div className="dash-stat__meta">
-              <div className="dash-stat__label">Avg Success Rate</div>
-              <div className="dash-stat__value">{avgSuccessRate}%</div>
-            </div>
-          </div>
-          <div className="dash-stat">
-            <div className="dash-stat__icon">
-              <Icon name="clipboard" className="icon" decorative />
-            </div>
-            <div className="dash-stat__meta">
-              <div className="dash-stat__label">Total Students</div>
-              <div className="dash-stat__value">
-                {consultantsForBranch.reduce((sum, c) => sum + (c.performanceMetrics?.totalStudents || 0), 0)}
+            <div className="dash-stat">
+              <div className="dash-stat__icon">
+                <Icon name="clipboard" className="icon" decorative />
+              </div>
+              <div className="dash-stat__meta">
+                <div className="dash-stat__label">Total Students</div>
+                <div className="dash-stat__value">
+                  {consultantsForBranch.reduce((sum, c) => sum + (c.performanceMetrics?.totalStudents || 0), 0)}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {error && <div className="alert alert--error">{error}</div>}
+          {error && <div className="alert alert--error">{error}</div>}
 
-        {/* Main Content */}
-        <div className={styles['dash-card']}>
-          <div className={styles['dash-card__body']}>
-            {filteredConsultants.length === 0 ? (
-              <div className="inbox__empty">
-                <p>No consultants found matching your criteria</p>
-                {canEdit && !consultantsForBranch.length && (
-                  <button
-                    className="action-button action-button--primary"
-                    onClick={() => setShowForm(true)}
-                    style={{ marginTop: '12px' }}
-                    aria-label="Add your first consultant"
-                  >
-                    <Icon name="users" className="icon icon--sm" decorative />
-                    Add your first consultant
-                  </button>
-                )}
-              </div>
-            ) : viewMode === 'cards' ? (
-              <div className="consultants-grid">
-                {filteredConsultants.map(consultant => (
-                  <div key={consultant.id} className="consultant-card">
-                    <div className="consultant-card__header">
-                      <div className="consultant-avatar">
-                        {consultant.name ? consultant.name.charAt(0).toUpperCase() : '?'}
-                      </div>
-                      <div className="consultant-info">
-                        <h3>
-                          <Link to={`/consultants/${consultant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            {consultant.name || 'Unnamed Consultant'}
-                          </Link>
-                        </h3>
-                        <p className={consultant.isActive ? 'status-active' : 'status-inactive'}>
-                          {consultant.isActive ? 'Active' : 'Inactive'} • {consultant.assignedStudents?.length || 0} students
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="consultant-card__body">
-                      <div className="consultant-meta">
-                        <div className="consultant-meta-item">
-                          <Icon name="messages" className="icon icon--sm" decorative />
-                          <span>{consultant.email || 'No email'}</span>
-                        </div>
-                        <div className="consultant-meta-item">
-                          <Icon name="phone" className="icon icon--sm" decorative />
-                          <span>{consultant.phone || 'No phone'}</span>
-                        </div>
-                        <div className="consultant-meta-item">
-                          <Icon name="calendar" className="icon icon--sm" decorative />
-                          <span>Joined {new Date(consultant.joinedDate || consultant.createdAt).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-
-                      <div className="specializations">
-                        {consultant.specializations?.slice(0, 3).map((spec, index) => (
-                          <span key={index} className="specialization-tag">{spec}</span>
-                        ))}
-                        {consultant.specializations?.length > 3 && (
-                          <span className="specialization-tag">+{consultant.specializations.length - 3} more</span>
-                        )}
-                      </div>
-
-                      <div className="performance-metrics">
-                        <div className="metrics-grid">
-                          <div className="metric-item">
-                            <div className="metric-value">{consultant.performanceMetrics?.successRate || 0}%</div>
-                            <div className="metric-label">Success Rate</div>
-                          </div>
-                          <div className="metric-item">
-                            <div className="metric-value">{consultant.performanceMetrics?.activeStudents || 0}</div>
-                            <div className="metric-label">Active Students</div>
-                          </div>
-                          <div className="metric-item">
-                            <div className="metric-value">{consultant.performanceMetrics?.completedApplications || 0}</div>
-                            <div className="metric-label">Completed</div>
-                          </div>
-                          <div className="metric-item">
-                            <div className="metric-value">{consultant.performanceMetrics?.avgResponseTime || 'N/A'}</div>
-                            <div className="metric-label">Avg Response</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {consultant.assignedStudents?.length > 0 && (
-                        <div className="assigned-students">
-                          <h4>Assigned Students</h4>
-                          <div className="student-list">
-                            {consultant.assignedStudents.slice(0, 3).map(studentId => (
-                              <span key={studentId} className="student-tag">
-                                {getStudentName(studentId)}
-                              </span>
-                            ))}
-                            {consultant.assignedStudents.length > 3 && (
-                              <span className="student-tag">+{consultant.assignedStudents.length - 3} more</span>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="consultant-card__actions">
-                      {canEdit && (
-                        <>
-                          <button
-                            className="action-button action-button--secondary action-button--small"
-                            onClick={() => handleEdit(consultant)}
-                            title="Edit consultant"
-                          >
-                            <Icon name="edit" className="icon icon--sm" decorative />
-                            Edit
-                          </button>
-                          <button
-                            className="action-button action-button--danger action-button--small"
-                            onClick={() => handleDelete(consultant.id)}
-                            title="Delete consultant"
-                          >
-                            <Icon name="trash" className="icon icon--sm" decorative />
-                            Delete
-                          </button>
-                        </>
-                      )}
-                      <Link 
-                        to={`/consultants/${consultant.id}`}
-                        className="action-button action-button--primary action-button--small"
-                      >
-                        <Icon name="eye" className="icon icon--sm" decorative />
-                        View
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Consultant</th>
-                    <th>Specializations</th>
-                    <th>Students</th>
-                    <th>Success Rate</th>
-                    <th>Response Time</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
+          {/* Main Content */}
+          <div className={styles['dash-card']}>
+            <div className={styles['dash-card__body']}>
+              {filteredConsultants.length === 0 ? (
+                <div className="inbox__empty">
+                  <p>No consultants found matching your criteria</p>
+                  {canEdit && !consultantsForBranch.length && (
+                    <button
+                      className="action-button action-button--primary"
+                      onClick={() => setShowForm(true)}
+                      style={{ marginTop: '12px' }}
+                      aria-label="Add your first consultant"
+                    >
+                      <Icon name="users" className="icon icon--sm" decorative />
+                      Add your first consultant
+                    </button>
+                  )}
+                </div>
+              ) : viewMode === 'cards' ? (
+                <div className="consultants-grid">
                   {filteredConsultants.map(consultant => (
-                    <tr key={consultant.id}>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div className="consultant-avatar" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
-                            {consultant.name ? consultant.name.charAt(0).toUpperCase() : '?'}
+                    <div key={consultant.id} className="consultant-card">
+                      <div className="consultant-card__header">
+                        <div className="consultant-avatar">
+                          {consultant.name ? consultant.name.charAt(0).toUpperCase() : '?'}
+                        </div>
+                        <div className="consultant-info">
+                          <h3>
+                            <Link to={`/consultants/${consultant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                              {consultant.name || 'Unnamed Consultant'}
+                            </Link>
+                          </h3>
+                          <p className={consultant.isActive ? 'status-active' : 'status-inactive'}>
+                            {consultant.isActive ? 'Active' : 'Inactive'} • {consultant.assignedStudents?.length || 0} students
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="consultant-card__body">
+                        <div className="consultant-meta">
+                          <div className="consultant-meta-item">
+                            <Icon name="messages" className="icon icon--sm" decorative />
+                            <span>{consultant.email || 'No email'}</span>
                           </div>
-                          <div>
-                            <strong>
-                              <Link to={`/consultants/${consultant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                {consultant.name}
-                              </Link>
-                            </strong>
-                            <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                              {consultant.email}
+                          <div className="consultant-meta-item">
+                            <Icon name="phone" className="icon icon--sm" decorative />
+                            <span>{consultant.phone || 'No phone'}</span>
+                          </div>
+                          <div className="consultant-meta-item">
+                            <Icon name="calendar" className="icon icon--sm" decorative />
+                            <span>Joined {new Date(consultant.joinedDate || consultant.createdAt).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+
+                        <div className="specializations">
+                          {consultant.specializations?.slice(0, 3).map((spec, index) => (
+                            <span key={index} className="specialization-tag">{spec}</span>
+                          ))}
+                          {consultant.specializations?.length > 3 && (
+                            <span className="specialization-tag">+{consultant.specializations.length - 3} more</span>
+                          )}
+                        </div>
+
+                        <div className="performance-metrics">
+                          <div className="metrics-grid">
+                            <div className="metric-item">
+                              <div className="metric-value">{consultant.performanceMetrics?.successRate || 0}%</div>
+                              <div className="metric-label">Success Rate</div>
+                            </div>
+                            <div className="metric-item">
+                              <div className="metric-value">{consultant.performanceMetrics?.activeStudents || 0}</div>
+                              <div className="metric-label">Active Students</div>
+                            </div>
+                            <div className="metric-item">
+                              <div className="metric-value">{consultant.performanceMetrics?.completedApplications || 0}</div>
+                              <div className="metric-label">Completed</div>
+                            </div>
+                            <div className="metric-item">
+                              <div className="metric-value">{consultant.performanceMetrics?.avgResponseTime || 'N/A'}</div>
+                              <div className="metric-label">Avg Response</div>
                             </div>
                           </div>
                         </div>
-                      </td>
-                      <td>
-                        <div className="specializations">
-                          {consultant.specializations?.slice(0, 2).map((spec, index) => (
-                            <span key={index} className="specialization-tag">{spec}</span>
-                          ))}
-                        </div>
-                      </td>
-                      <td>
-                        <strong>{consultant.performanceMetrics?.activeStudents || 0}</strong> active
-                        <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                          {consultant.performanceMetrics?.totalStudents || 0} total
-                        </div>
-                      </td>
-                      <td>
-                        <strong style={{ color: 'var(--color-primary)' }}>
-                          {consultant.performanceMetrics?.successRate || 0}%
-                        </strong>
-                      </td>
-                      <td>{consultant.performanceMetrics?.avgResponseTime || 'N/A'}</td>
-                      <td>
-                        <span className={consultant.isActive ? 'status-active' : 'status-inactive'}>
-                          {consultant.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <Link 
-                            to={`/consultants/${consultant.id}`}
-                            className="action-button action-button--small"
-                          >
-                            View
-                          </Link>
-                          {canEdit && (
+
+                        {consultant.assignedStudents?.length > 0 && (
+                          <div className="assigned-students">
+                            <h4>Assigned Students</h4>
+                            <div className="student-list">
+                              {consultant.assignedStudents.slice(0, 3).map(studentId => (
+                                <span key={studentId} className="student-tag">
+                                  {getStudentName(studentId)}
+                                </span>
+                              ))}
+                              {consultant.assignedStudents.length > 3 && (
+                                <span className="student-tag">+{consultant.assignedStudents.length - 3} more</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="consultant-card__actions">
+                        {canEdit && (
+                          <>
                             <button
-                              className="action-button action-button--small"
+                              className="action-button action-button--secondary action-button--small"
                               onClick={() => handleEdit(consultant)}
+                              title="Edit consultant"
                             >
+                              <Icon name="edit" className="icon icon--sm" decorative />
                               Edit
                             </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
+                            <button
+                              className="action-button action-button--danger action-button--small"
+                              onClick={() => handleDelete(consultant.id)}
+                              title="Delete consultant"
+                            >
+                              <Icon name="trash" className="icon icon--sm" decorative />
+                              Delete
+                            </button>
+                          </>
+                        )}
+                        <Link 
+                          to={`/consultants/${consultant.id}`}
+                          className="action-button action-button--primary action-button--small"
+                        >
+                          <Icon name="eye" className="icon icon--sm" decorative />
+                          View
+                        </Link>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </div>
-
-        {/* Form Modal */}
-        {showForm && (
-          <div className="modal-overlay" onClick={() => setShowForm(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
-              width: 'min(700px, 90vw)', 
-              maxHeight: '90vh', 
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div className="modal-header">
-                <h3>{editingConsultant ? 'Edit Consultant' : 'Add New Consultant'}</h3>
-                <button className="modal-close" onClick={() => setShowForm(false)}>
-                  <Icon name="x-mark" className="icon" decorative />
-                </button>
-              </div>
-              <div className="modal-body" style={{
-                flex: 1,
-                overflow: 'auto',
-                padding: '1.5rem'
-              }}>
-                <ConsultantForm
-                  consultant={editingConsultant}
-                  onSubmit={editingConsultant ? handleUpdate : handleAdd}
-                  consultants={consultants}
-                  onCancel={() => {
-                    setShowForm(false);
-                    setEditingConsultant(null);
-                  }}
-                />
-              </div>
+                </div>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Consultant</th>
+                      <th>Specializations</th>
+                      <th>Students</th>
+                      <th>Success Rate</th>
+                      <th>Response Time</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredConsultants.map(consultant => (
+                      <tr key={consultant.id}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div className="consultant-avatar" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
+                              {consultant.name ? consultant.name.charAt(0).toUpperCase() : '?'}
+                            </div>
+                            <div>
+                              <strong>
+                                <Link to={`/consultants/${consultant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                  {consultant.name}
+                                </Link>
+                              </strong>
+                              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                                {consultant.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="specializations">
+                            {consultant.specializations?.slice(0, 2).map((spec, index) => (
+                              <span key={index} className="specialization-tag">{spec}</span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <strong>{consultant.performanceMetrics?.activeStudents || 0}</strong> active
+                          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                            {consultant.performanceMetrics?.totalStudents || 0} total
+                          </div>
+                        </td>
+                        <td>
+                          <strong style={{ color: 'var(--primary)' }}>
+                            {consultant.performanceMetrics?.successRate || 0}%
+                          </strong>
+                        </td>
+                        <td>{consultant.performanceMetrics?.avgResponseTime || 'N/A'}</td>
+                        <td>
+                          <span className={consultant.isActive ? 'status-active' : 'status-inactive'}>
+                            {consultant.isActive ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <Link 
+                              to={`/consultants/${consultant.id}`}
+                              className="action-button action-button--small"
+                            >
+                              View
+                            </Link>
+                            {canEdit && (
+                              <button
+                                className="action-button action-button--small"
+                                onClick={() => handleEdit(consultant)}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
-        )}
+
+          {/* Form Modal */}
+          {showForm && (
+            <div className="modal-overlay" onClick={() => setShowForm(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
+                width: 'min(700px, 90vw)', 
+                maxHeight: '90vh', 
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                <div className="modal-header">
+                  <h3>{editingConsultant ? 'Edit Consultant' : 'Add New Consultant'}</h3>
+                  <button className="modal-close" onClick={() => setShowForm(false)}>
+                    <Icon name="x-mark" className="icon" decorative />
+                  </button>
+                </div>
+                <div className="modal-body" style={{
+                  flex: 1,
+                  overflow: 'auto',
+                  padding: '1.5rem'
+                }}>
+                  <ConsultantForm
+                    consultant={editingConsultant}
+                    onSubmit={editingConsultant ? handleUpdate : handleAdd}
+                    consultants={consultants}
+                    onCancel={() => {
+                      setShowForm(false);
+                      setEditingConsultant(null);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
       </section>
     </>
   );

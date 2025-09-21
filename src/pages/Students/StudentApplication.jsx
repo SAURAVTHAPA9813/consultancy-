@@ -148,7 +148,7 @@ export default function StudentApplication() {
     ]);
   };
 
-  // Handler functions - PROPERLY DEFINED HERE
+  // Handler functions
   const handleNewApplication = (appData) => {
     try {
       const newApp = {
@@ -249,7 +249,11 @@ export default function StudentApplication() {
 
   if (loading) {
     return (
-      <div className="application-tracker">
+      <div className="application-tracker-main">
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
         <div className="loading-state">
           <Icon name="clock" size={24} />
           <p>Loading application data...</p>
@@ -260,7 +264,11 @@ export default function StudentApplication() {
 
   if (error || !student) {
     return (
-      <div className="application-tracker">
+      <div className="application-tracker-main">
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
         <div className="error-state">
           <Icon name="x-mark" size={24} />
           <p>{error || 'Student not found'}</p>
@@ -274,22 +282,100 @@ export default function StudentApplication() {
 
   return (
     <>
-      {/* INLINE STYLES */}
+      {/* AETHERIAL GLASS STYLES */}
       <style>{`
+        /* CSS Variables - Aetherial Glass Design System */
+        :root {
+          --primary: #6366f1;
+          --primary-light: #818cf8;
+          --primary-dark: #4f46e5;
+          --secondary: #8b5cf6;
+          --secondary-light: #a78bfa;
+          --success: #10b981;
+          --warning: #f59e0b;
+          --danger: #ef4444;
+          --info: #06b6d4;
+          --dark: #0f172a;
+          --dark-secondary: #1e293b;
+          --dark-tertiary: #334155;
+          --glass-bg: rgba(15, 23, 42, 0.6);
+          --glass-bg-light: rgba(30, 41, 59, 0.4);
+          --glass-border: rgba(148, 163, 184, 0.15);
+          --text: #e2e8f0;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+          --border: rgba(148, 163, 184, 0.1);
+          --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+          --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .animated-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          animation: float 20s infinite ease-in-out;
+        }
+
+        .orb1 {
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+          top: -200px;
+          right: -200px;
+          opacity: 0.2;
+        }
+
+        .orb2 {
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+          bottom: -300px;
+          left: -300px;
+          opacity: 0.15;
+          animation-delay: -10s;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(30px, -30px) rotate(90deg); }
+          50% { transform: translate(-20px, 20px) rotate(180deg); }
+          75% { transform: translate(-30px, -20px) rotate(270deg); }
+        }
+
+        .application-tracker-main {
+          min-height: 100vh;
+          background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%);
+          color: var(--text);
+          position: relative;
+        }
+
         .application-tracker {
-          padding: var(--space-6, 24px);
+          padding: 2rem;
           max-width: 1400px;
           margin: 0 auto;
+          position: relative;
+          z-index: 1;
         }
 
         .tracker-header {
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
-          gap: var(--space-4, 16px);
-          margin-bottom: var(--space-6, 24px);
-          padding-bottom: var(--space-4, 16px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          gap: 1rem;
+          margin-bottom: 2rem;
+          padding: 2rem;
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
         }
 
         .tracker-header__info {
@@ -297,21 +383,24 @@ export default function StudentApplication() {
         }
 
         .tracker-header__title {
-          margin: 0 0 var(--space-1, 4px) 0;
-          font-size: var(--font-2xl, 24px);
-          font-weight: var(--font-bold, 700);
-          color: var(--color-text, #111827);
+          margin: 0 0 0.5rem 0;
+          font-size: 2rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--secondary) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .tracker-header__subtitle {
-          margin: 0 0 var(--space-2, 8px) 0;
-          color: var(--color-text-muted, #6b7280);
-          font-size: var(--font-sm, 14px);
+          margin: 0 0 0.5rem 0;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
         }
 
         .tracker-actions {
           display: flex;
-          gap: var(--space-2, 8px);
+          gap: 0.5rem;
           flex-wrap: wrap;
         }
 
@@ -320,130 +409,154 @@ export default function StudentApplication() {
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          padding: 0.55rem 0.85rem;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          background: var(--color-surface, #fff);
-          color: var(--color-text, #111827);
-          font-weight: var(--font-medium, 500);
+          padding: 0.75rem 1.25rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          font-weight: 500;
           cursor: pointer;
-          transition: all 0.12s ease;
+          transition: all 0.3s ease;
           text-decoration: none;
         }
 
         .action-button:hover {
-          transform: translateY(-1px);
-          background: var(--color-surface-hover, #f9fafb);
+          transform: translateY(-2px);
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
         }
 
         .action-button--primary {
-          background: var(--color-primary, #2563eb);
-          border-color: var(--color-primary, #2563eb);
-          color: var(--color-text-inverse, #fff);
+          background: var(--primary);
+          border-color: var(--primary);
+          color: white;
         }
 
         .action-button--primary:hover {
-          background: var(--color-primary-dark, #1e40af);
-          border-color: var(--color-primary-dark, #1e40af);
+          background: var(--primary-dark);
+          border-color: var(--primary-dark);
         }
 
         .tabs {
           display: flex;
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
-          margin-bottom: var(--space-6, 24px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          padding: 0.5rem;
+          margin-bottom: 2rem;
+          box-shadow: var(--shadow-card);
         }
 
         .tab {
-          padding: var(--space-3, 12px) var(--space-4, 16px);
+          padding: 0.75rem 1rem;
           border: none;
           background: transparent;
-          color: var(--color-text-muted, #6b7280);
-          font-weight: var(--font-medium, 500);
+          color: var(--text-secondary);
+          font-weight: 500;
           cursor: pointer;
-          border-bottom: 2px solid transparent;
-          transition: all 0.12s ease;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          flex: 1;
+          text-align: center;
         }
 
         .tab:hover {
-          color: var(--color-text, #111827);
+          color: var(--text);
+          background: var(--glass-bg-light);
         }
 
         .tab--active {
-          color: var(--color-primary, #2563eb);
-          border-bottom-color: var(--color-primary, #2563eb);
+          color: white;
+          background: var(--primary);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .pipeline {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: var(--space-4, 16px);
-          margin-bottom: var(--space-6, 24px);
+          gap: 1rem;
+          margin-bottom: 2rem;
         }
 
         .pipeline-column {
-          background: var(--color-surface, #fff);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-lg, 12px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
           overflow: hidden;
+          transition: all 0.3s ease;
+        }
+
+        .pipeline-column:hover {
+          transform: translateY(-4px);
+          border-color: rgba(99, 102, 241, 0.3);
+          box-shadow: var(--shadow-glow), var(--shadow-card);
         }
 
         .pipeline-column__header {
-          padding: var(--space-3, 12px) var(--space-4, 16px);
-          background: var(--color-bg, #f9fafb);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          padding: 1rem 1.25rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--glass-border);
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
 
         .pipeline-column__title {
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
+          font-weight: 600;
+          color: var(--text);
           margin: 0;
         }
 
         .pipeline-column__count {
-          background: var(--color-border, #e5e7eb);
-          color: var(--color-text-muted, #6b7280);
+          background: var(--glass-bg);
+          color: var(--text-secondary);
           padding: 0.25rem 0.5rem;
-          border-radius: 999px;
-          font-size: var(--font-xs, 12px);
-          font-weight: var(--font-medium, 500);
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+          border: 1px solid var(--glass-border);
         }
 
         .pipeline-column__body {
-          padding: var(--space-3, 12px);
+          padding: 1rem;
           min-height: 200px;
         }
 
         .application-card {
-          background: var(--color-surface, #fff);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          padding: var(--space-3, 12px);
-          margin-bottom: var(--space-2, 8px);
-          transition: all 0.12s ease;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          padding: 1rem;
+          margin-bottom: 0.75rem;
+          transition: all 0.3s ease;
           cursor: move;
         }
 
         .application-card:hover {
-          border-color: var(--color-primary, #2563eb);
-          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+          border-color: var(--primary);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+          transform: translateY(-2px);
         }
 
         .application-card__header {
-          margin-bottom: var(--space-2, 8px);
+          margin-bottom: 0.5rem;
         }
 
         .application-card__university {
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
-          margin: 0 0 var(--space-1, 4px) 0;
+          font-weight: 600;
+          color: var(--text);
+          margin: 0 0 0.25rem 0;
         }
 
         .application-card__program {
-          color: var(--color-text-muted, #6b7280);
-          font-size: var(--font-sm, 14px);
+          color: var(--text-secondary);
+          font-size: 0.875rem;
           margin: 0;
         }
 
@@ -451,148 +564,171 @@ export default function StudentApplication() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: var(--space-2, 8px);
+          margin-top: 0.5rem;
         }
 
         .application-card__deadline {
-          font-size: var(--font-xs, 12px);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 12px;
+          color: var(--text-muted);
         }
 
         .application-card__actions {
           display: flex;
-          gap: var(--space-1, 4px);
+          gap: 0.25rem;
         }
 
         .card-button {
           padding: 0.25rem 0.5rem;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-sm, 6px);
-          background: var(--color-surface, #fff);
-          color: var(--color-text-muted, #6b7280);
-          font-size: var(--font-xs, 12px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 8px;
+          color: var(--text-secondary);
+          font-size: 12px;
           cursor: pointer;
-          transition: all 0.12s ease;
+          transition: all 0.3s ease;
         }
 
         .card-button:hover {
-          background: var(--color-bg, #f9fafb);
-          color: var(--color-text, #111827);
+          background: var(--primary);
+          color: white;
+          border-color: var(--primary);
         }
 
         .status-pill {
           display: inline-flex;
           align-items: center;
           gap: 0.35rem;
-          padding: 0.15rem 0.5rem;
-          border-radius: 999px;
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
           font-size: 12px;
-          font-weight: var(--font-medium, 500);
-          border: 1px solid;
+          font-weight: 500;
+          backdrop-filter: blur(20px);
+          border: 1px solid transparent;
         }
 
-        .status-pill--green { background: #dcfce7; color: #166534; border-color: #86efac; }
-        .status-pill--blue { background: #dbeafe; color: #1e3a8a; border-color: #93c5fd; }
-        .status-pill--yellow { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-        .status-pill--orange { background: #fed7aa; color: #9a3412; border-color: #fdba74; }
-        .status-pill--red { background: #fecaca; color: #991b1b; border-color: #f87171; }
-        .status-pill--purple { background: #e9d5ff; color: #7c2d12; border-color: #c4b5fd; }
-        .status-pill--gray { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
+        .status-pill--green { background: rgba(16, 185, 129, 0.2); color: var(--success); border-color: rgba(16, 185, 129, 0.3); }
+        .status-pill--blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
+        .status-pill--yellow { background: rgba(245, 158, 11, 0.2); color: var(--warning); border-color: rgba(245, 158, 11, 0.3); }
+        .status-pill--orange { background: rgba(249, 115, 22, 0.2); color: #fb923c; border-color: rgba(249, 115, 22, 0.3); }
+        .status-pill--red { background: rgba(239, 68, 68, 0.2); color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
+        .status-pill--purple { background: rgba(139, 92, 246, 0.2); color: var(--secondary); border-color: rgba(139, 92, 246, 0.3); }
+        .status-pill--gray { background: var(--glass-bg-light); color: var(--text-secondary); border-color: var(--glass-border); }
 
         .data-table {
           width: 100%;
           border-collapse: collapse;
-          background: var(--color-surface, #fff);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
           overflow: hidden;
         }
 
         .data-table th {
-          background: var(--color-bg, #f9fafb);
-          padding: var(--space-3, 12px);
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          padding: 1rem;
           text-align: left;
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          font-weight: 600;
+          color: var(--text);
+          border-bottom: 1px solid var(--glass-border);
         }
 
         .data-table td {
-          padding: var(--space-3, 12px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          padding: 1rem;
+          border-bottom: 1px solid var(--glass-border);
           vertical-align: middle;
+          color: var(--text);
         }
 
         .data-table tr:hover {
-          background: var(--color-surface-hover, #f9fafb);
+          background: rgba(99, 102, 241, 0.05);
         }
 
         .deadline-item {
           display: flex;
           align-items: center;
-          gap: var(--space-3, 12px);
-          padding: var(--space-3, 12px);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          margin-bottom: var(--space-2, 8px);
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          margin-bottom: 0.75rem;
+          transition: all 0.3s ease;
+        }
+
+        .deadline-item:hover {
+          transform: translateX(4px);
+          border-color: var(--primary);
         }
 
         .deadline-item__icon {
-          width: 32px;
-          height: 32px;
+          width: 48px;
+          height: 48px;
           border-radius: 50%;
           display: grid;
           place-items: center;
           flex-shrink: 0;
         }
 
-        .deadline-item__icon--urgent { background: #fecaca; color: #991b1b; }
-        .deadline-item__icon--upcoming { background: #fef3c7; color: #92400e; }
-        .deadline-item__icon--future { background: #dbeafe; color: #1e3a8a; }
-        .deadline-item__icon--overdue { background: #991b1b; color: #fff; }
+        .deadline-item__icon--urgent { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .deadline-item__icon--upcoming { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .deadline-item__icon--future { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .deadline-item__icon--overdue { background: var(--danger); color: white; }
 
         .deadline-item__content {
           flex: 1;
         }
 
         .deadline-item__title {
-          font-weight: var(--font-semibold, 600);
-          color: var(--color-text, #111827);
-          margin: 0 0 var(--space-1, 4px) 0;
+          font-weight: 600;
+          color: var(--text);
+          margin: 0 0 0.25rem 0;
         }
 
         .deadline-item__meta {
-          font-size: var(--font-sm, 14px);
-          color: var(--color-text-muted, #6b7280);
+          font-size: 0.875rem;
+          color: var(--text-secondary);
         }
 
         .document-checklist {
           display: grid;
-          gap: var(--space-2, 8px);
+          gap: 0.75rem;
         }
 
         .document-item {
           display: flex;
           align-items: center;
-          gap: var(--space-3, 12px);
-          padding: var(--space-3, 12px);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
+          gap: 1rem;
+          padding: 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .document-item:hover {
+          transform: translateX(4px);
+          border-color: var(--primary);
         }
 
         .document-item__checkbox {
-          width: 20px;
-          height: 20px;
-          border: 2px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-sm, 4px);
+          width: 24px;
+          height: 24px;
+          border: 2px solid var(--glass-border);
+          border-radius: 6px;
           display: grid;
           place-items: center;
           flex-shrink: 0;
         }
 
         .document-item__checkbox--approved {
-          background: #166534;
-          border-color: #166534;
+          background: var(--success);
+          border-color: var(--success);
           color: white;
         }
 
@@ -601,8 +737,8 @@ export default function StudentApplication() {
         }
 
         .document-item__name {
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text, #111827);
+          font-weight: 500;
+          color: var(--text);
           margin: 0;
         }
 
@@ -613,26 +749,33 @@ export default function StudentApplication() {
           justify-content: center;
           padding: 3rem 2rem;
           text-align: center;
-          color: var(--color-text-muted, #6b7280);
+          color: var(--text-secondary);
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
         }
 
         .modal-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.45);
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(8px);
           display: grid;
           place-items: center;
-          padding: var(--space-6, 24px);
+          padding: 1.5rem;
           z-index: 9999;
         }
 
         .modal-content {
           width: min(520px, 86vw);
-          background: var(--color-surface, #fff);
-          color: var(--color-text, #111827);
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-xl, 14px);
-          box-shadow: var(--shadow-xl, 0 20px 40px rgba(0, 0, 0, 0.18));
+          background: var(--glass-bg);
+          backdrop-filter: blur(20px);
+          color: var(--text);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          box-shadow: var(--shadow-card);
           overflow: hidden;
         }
 
@@ -640,58 +783,75 @@ export default function StudentApplication() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: var(--space-4, 16px);
-          padding: var(--space-4, 16px) var(--space-5, 20px);
-          border-bottom: 1px solid var(--color-border, #e5e7eb);
+          gap: 1rem;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid var(--glass-border);
+        }
+
+        .modal-header h3 {
+          margin: 0;
+          color: var(--text);
+          font-size: 1.25rem;
+          font-weight: 600;
         }
 
         .modal-close {
           appearance: none;
-          background: transparent;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          padding: 0.35rem 0.55rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 8px;
+          padding: 0.5rem;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.4rem;
+          color: var(--text-secondary);
+          transition: all 0.3s ease;
         }
 
         .modal-close:hover {
-          background: var(--color-surface-hover, #f9fafb);
+          background: var(--primary);
+          color: white;
+          border-color: var(--primary);
         }
 
         .modal-body {
-          padding: var(--space-5, 20px);
+          padding: 1.5rem;
           max-height: min(70vh, 560px);
           overflow: auto;
         }
 
         .form-group {
-          margin-bottom: var(--space-4, 16px);
+          margin-bottom: 1rem;
         }
 
         .form-label {
           display: block;
-          font-weight: var(--font-medium, 500);
-          color: var(--color-text, #111827);
-          margin-bottom: var(--space-1, 4px);
+          font-weight: 500;
+          color: var(--text);
+          margin-bottom: 0.25rem;
         }
 
         .form-input, .form-select, .form-textarea {
           width: 100%;
-          padding: 0.6rem 0.8rem;
-          border: 1px solid var(--color-border, #e5e7eb);
-          border-radius: var(--radius-md, 8px);
-          background: var(--color-surface, #fff);
-          color: var(--color-text, #111827);
+          padding: 0.75rem 1rem;
+          background: var(--glass-bg-light);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          color: var(--text);
+          transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+          color: var(--text-muted);
         }
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
           outline: none;
-          border-color: var(--color-primary, #2563eb);
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+          border-color: var(--primary);
+          box-shadow: var(--shadow-glow);
         }
 
         .form-textarea {
@@ -702,10 +862,14 @@ export default function StudentApplication() {
         .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: var(--space-3, 12px);
+          gap: 1rem;
         }
 
         @media (max-width: 768px) {
+          .application-tracker {
+            padding: 1rem;
+          }
+          
           .pipeline {
             grid-template-columns: 1fr;
           }
@@ -721,235 +885,117 @@ export default function StudentApplication() {
         }
       `}</style>
 
-      <div className="application-tracker">
-        {/* Header */}
-        <div className="tracker-header">
-          <div className="tracker-header__info">
-            <h1 className="tracker-header__title">Application Tracking - {student.name}</h1>
-            <p className="tracker-header__subtitle">
-              Track university applications, visa processes, and deadlines
-            </p>
-          </div>
-          
-          <div className="tracker-actions">
-            <Link to={`/students/${student.id}`} className="action-button">
-              <Icon name="arrow-left" size={16} />
-              Back to Profile
-            </Link>
+      <div className="application-tracker-main">
+        {/* Animated Background */}
+        <div className="animated-bg">
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+        </div>
+
+        <div className="application-tracker">
+          {/* Header */}
+          <div className="tracker-header">
+            <div className="tracker-header__info">
+              <h1 className="tracker-header__title">Application Tracking - {student.name}</h1>
+              <p className="tracker-header__subtitle">
+                Track university applications, visa processes, and deadlines
+              </p>
+            </div>
             
-            {canEdit && (
-              <>
-                <button 
-                  className="action-button action-button--primary"
-                  onClick={() => setShowNewAppModal(true)}
-                >
-                  <Icon name="plus" size={16} />
-                  New Application
-                </button>
-                
-                <button 
-                  className="action-button action-button--primary"
-                  onClick={() => setShowNewVisaModal(true)}
-                >
-                  <Icon name="document" size={16} />
-                  Visa Application
-                </button>
-              </>
-            )}
+            <div className="tracker-actions">
+              <Link to={`/students/${student.id}`} className="action-button">
+                <Icon name="arrow-left" size={16} />
+                Back to Profile
+              </Link>
+              
+              {canEdit && (
+                <>
+                  <button 
+                    className="action-button action-button--primary"
+                    onClick={() => setShowNewAppModal(true)}
+                  >
+                    <Icon name="plus" size={16} />
+                    New Application
+                  </button>
+                  
+                  <button 
+                    className="action-button action-button--primary"
+                    onClick={() => setShowNewVisaModal(true)}
+                  >
+                    <Icon name="document" size={16} />
+                    Visa Application
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Tabs */}
-        <div className="tabs">
-          <button 
-            className={`tab ${activeTab === 'pipeline' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('pipeline')}
-          >
-            Application Pipeline
-          </button>
-          <button 
-            className={`tab ${activeTab === 'university' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('university')}
-          >
-            University Applications
-          </button>
-          <button 
-            className={`tab ${activeTab === 'visa' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('visa')}
-          >
-            Visa Applications
-          </button>
-          <button 
-            className={`tab ${activeTab === 'documents' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('documents')}
-          >
-            Document Checklist
-          </button>
-          <button 
-            className={`tab ${activeTab === 'deadlines' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('deadlines')}
-          >
-            Deadlines
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'pipeline' && (
-          <div className="pipeline">
-            {pipelineStages.map(stage => {
-              const stageApplications = applications.filter(app => app.status === stage.id);
-              return (
-                <div key={stage.id} className="pipeline-column">
-                  <div className="pipeline-column__header">
-                    <h3 className="pipeline-column__title">{stage.name}</h3>
-                    <span className="pipeline-column__count">{stageApplications.length}</span>
-                  </div>
-                  <div className="pipeline-column__body">
-                    {stageApplications.map(app => (
-                      <div key={app.id} className="application-card">
-                        <div className="application-card__header">
-                          <h4 className="application-card__university">{app.university}</h4>
-                          <p className="application-card__program">{app.program} - {app.degree}</p>
-                        </div>
-                        <div className="application-card__meta">
-                          <span className="application-card__deadline">
-                            Due: {formatDate(app.deadline)}
-                          </span>
-                          <div className="application-card__actions">
-                            {stage.id !== 'rejected' && stage.id !== 'accepted' && canEdit && (
-                              <>
-                                {stage.id !== 'preparing' && (
-                                  <button 
-                                    className="card-button"
-                                    onClick={() => {
-                                      const prevStageIndex = pipelineStages.findIndex(s => s.id === stage.id) - 1;
-                                      if (prevStageIndex >= 0) {
-                                        moveApplication(app.id, pipelineStages[prevStageIndex].id);
-                                      }
-                                    }}
-                                    title="Move back"
-                                  >
-                                    ←
-                                  </button>
-                                )}
-                                {stage.id !== 'waitlisted' && (
-                                  <button 
-                                    className="card-button"
-                                    onClick={() => {
-                                      const nextStageIndex = pipelineStages.findIndex(s => s.id === stage.id) + 1;
-                                      if (nextStageIndex < pipelineStages.length) {
-                                        moveApplication(app.id, pipelineStages[nextStageIndex].id);
-                                      }
-                                    }}
-                                    title="Move forward"
-                                  >
-                                    →
-                                  </button>
-                                )}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    
-                    {stageApplications.length === 0 && (
-                      <div style={{ 
-                        padding: '2rem 1rem', 
-                        textAlign: 'center', 
-                        color: 'var(--color-text-muted, #6b7280)',
-                        fontSize: '14px'
-                      }}>
-                        No applications in this stage
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+          {/* Tabs */}
+          <div className="tabs">
+            <button 
+              className={`tab ${activeTab === 'pipeline' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('pipeline')}
+            >
+              Application Pipeline
+            </button>
+            <button 
+              className={`tab ${activeTab === 'university' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('university')}
+            >
+              University Applications
+            </button>
+            <button 
+              className={`tab ${activeTab === 'visa' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('visa')}
+            >
+              Visa Applications
+            </button>
+            <button 
+              className={`tab ${activeTab === 'documents' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('documents')}
+            >
+              Document Checklist
+            </button>
+            <button 
+              className={`tab ${activeTab === 'deadlines' ? 'tab--active' : ''}`}
+              onClick={() => setActiveTab('deadlines')}
+            >
+              Deadlines
+            </button>
           </div>
-        )}
 
-        {activeTab === 'university' && (
-          <div>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>University</th>
-                  <th>Program</th>
-                  <th>Status</th>
-                  <th>Deadline</th>
-                  <th>Application Date</th>
-                  <th>Fee</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map(app => (
-                  <tr key={app.id}>
-                    <td>
-                      <strong>{app.university}</strong>
-                    </td>
-                    <td>{app.program} - {app.degree}</td>
-                    <td>
-                      <span className={`status-pill status-pill--${getStatusColor(app.status)}`}>
-                        {app.status.replace('-', ' ')}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={getDaysUntilDeadline(app.deadline) <= 7 ? 'text-red-600' : ''}>
-                        {formatDate(app.deadline)}
-                        <small style={{ display: 'block', fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                          ({getDaysUntilDeadline(app.deadline)} days)
-                        </small>
-                      </span>
-                    </td>
-                    <td>{app.applicationDate ? formatDate(app.applicationDate) : 'Not submitted'}</td>
-                    <td>${app.fee}</td>
-                    <td>
-                      {canEdit && (
-                        <button className="card-button">Edit</button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {activeTab === 'visa' && (
-          <div>
+          {/* Tab Content */}
+          {activeTab === 'pipeline' && (
             <div className="pipeline">
-              {visaStages.map(stage => {
-                const stageVisas = visaApplications.filter(visa => visa.status === stage.id);
+              {pipelineStages.map(stage => {
+                const stageApplications = applications.filter(app => app.status === stage.id);
                 return (
                   <div key={stage.id} className="pipeline-column">
                     <div className="pipeline-column__header">
                       <h3 className="pipeline-column__title">{stage.name}</h3>
-                      <span className="pipeline-column__count">{stageVisas.length}</span>
+                      <span className="pipeline-column__count">{stageApplications.length}</span>
                     </div>
                     <div className="pipeline-column__body">
-                      {stageVisas.map(visa => (
-                        <div key={visa.id} className="application-card">
+                      {stageApplications.map(app => (
+                        <div key={app.id} className="application-card">
                           <div className="application-card__header">
-                            <h4 className="application-card__university">{visa.country} - {visa.visaType}</h4>
-                            <p className="application-card__program">Processing: {visa.expectedProcessingTime}</p>
+                            <h4 className="application-card__university">{app.university}</h4>
+                            <p className="application-card__program">{app.program} - {app.degree}</p>
                           </div>
                           <div className="application-card__meta">
                             <span className="application-card__deadline">
-                              Fee: ${visa.fee}
+                              Due: {formatDate(app.deadline)}
                             </span>
                             <div className="application-card__actions">
-                              {canEdit && stage.id !== 'approved' && stage.id !== 'rejected' && (
+                              {stage.id !== 'rejected' && stage.id !== 'accepted' && canEdit && (
                                 <>
-                                  {stage.id !== 'document-prep' && (
+                                  {stage.id !== 'preparing' && (
                                     <button 
                                       className="card-button"
                                       onClick={() => {
-                                        const prevStageIndex = visaStages.findIndex(s => s.id === stage.id) - 1;
+                                        const prevStageIndex = pipelineStages.findIndex(s => s.id === stage.id) - 1;
                                         if (prevStageIndex >= 0) {
-                                          moveVisaApplication(visa.id, visaStages[prevStageIndex].id);
+                                          moveApplication(app.id, pipelineStages[prevStageIndex].id);
                                         }
                                       }}
                                       title="Move back"
@@ -957,13 +1003,13 @@ export default function StudentApplication() {
                                       ←
                                     </button>
                                   )}
-                                  {stage.id !== 'processing' && (
+                                  {stage.id !== 'waitlisted' && (
                                     <button 
                                       className="card-button"
                                       onClick={() => {
-                                        const nextStageIndex = visaStages.findIndex(s => s.id === stage.id) + 1;
-                                        if (nextStageIndex < visaStages.length) {
-                                          moveVisaApplication(visa.id, visaStages[nextStageIndex].id);
+                                        const nextStageIndex = pipelineStages.findIndex(s => s.id === stage.id) + 1;
+                                        if (nextStageIndex < pipelineStages.length) {
+                                          moveApplication(app.id, pipelineStages[nextStageIndex].id);
                                         }
                                       }}
                                       title="Move forward"
@@ -978,14 +1024,14 @@ export default function StudentApplication() {
                         </div>
                       ))}
                       
-                      {stageVisas.length === 0 && (
+                      {stageApplications.length === 0 && (
                         <div style={{ 
                           padding: '2rem 1rem', 
                           textAlign: 'center', 
-                          color: 'var(--color-text-muted, #6b7280)',
+                          color: 'var(--text-muted)',
                           fontSize: '14px'
                         }}>
-                          No visa applications in this stage
+                          No applications in this stage
                         </div>
                       )}
                     </div>
@@ -993,95 +1039,221 @@ export default function StudentApplication() {
                 );
               })}
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'documents' && (
-          <div>
-            <div className="document-checklist">
-              {documents.map(doc => (
-                <div key={doc.id} className="document-item">
-                  <div className={`document-item__checkbox ${doc.status === 'approved' ? 'document-item__checkbox--approved' : ''}`}>
-                    {doc.status === 'approved' && <Icon name="check" size={12} />}
-                  </div>
-                  <div className="document-item__content">
-                    <h4 className="document-item__name">{doc.name}</h4>
-                  </div>
-                  <span className={`status-pill status-pill--${getStatusColor(doc.status)}`}>
-                    {doc.status.replace('-', ' ')}
-                  </span>
-                  {doc.deadline && (
-                    <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                      Due: {formatDate(doc.deadline)}
-                    </span>
-                  )}
-                </div>
-              ))}
+          {activeTab === 'university' && (
+            <div>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>University</th>
+                    <th>Program</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th>Application Date</th>
+                    <th>Fee</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {applications.map(app => (
+                    <tr key={app.id}>
+                      <td>
+                        <strong>{app.university}</strong>
+                      </td>
+                      <td>{app.program} - {app.degree}</td>
+                      <td>
+                        <span className={`status-pill status-pill--${getStatusColor(app.status)}`}>
+                          {app.status.replace('-', ' ')}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={getDaysUntilDeadline(app.deadline) <= 7 ? 'text-red-600' : ''}>
+                          {formatDate(app.deadline)}
+                          <small style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)' }}>
+                            ({getDaysUntilDeadline(app.deadline)} days)
+                          </small>
+                        </span>
+                      </td>
+                      <td>{app.applicationDate ? formatDate(app.applicationDate) : 'Not submitted'}</td>
+                      <td>${app.fee}</td>
+                      <td>
+                        {canEdit && (
+                          <button className="card-button">Edit</button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'deadlines' && (
-          <div>
-            {deadlines
-              .sort((a, b) => new Date(a.date) - new Date(b.date))
-              .map(deadline => {
-                const status = getDeadlineStatus(deadline.date);
-                const daysUntil = getDaysUntilDeadline(deadline.date);
-                
-                return (
-                  <div key={deadline.id} className="deadline-item">
-                    <div className={`deadline-item__icon deadline-item__icon--${status}`}>
-                      <Icon name={
-                        deadline.type === 'application' ? 'document' :
-                        deadline.type === 'interview' ? 'users' :
-                        deadline.type === 'test' ? 'clipboard' :
-                        deadline.type === 'visa' ? 'globe' : 'calendar'
-                      } size={16} />
-                    </div>
-                    <div className="deadline-item__content">
-                      <h4 className="deadline-item__title">{deadline.title}</h4>
-                      <div className="deadline-item__meta">
-                        {formatDate(deadline.date)} • 
-                        {daysUntil < 0 ? ` ${Math.abs(daysUntil)} days overdue` :
-                         daysUntil === 0 ? ' Due today' :
-                         ` ${daysUntil} days remaining`} • 
-                        {deadline.type.charAt(0).toUpperCase() + deadline.type.slice(1)}
+          {activeTab === 'visa' && (
+            <div>
+              <div className="pipeline">
+                {visaStages.map(stage => {
+                  const stageVisas = visaApplications.filter(visa => visa.status === stage.id);
+                  return (
+                    <div key={stage.id} className="pipeline-column">
+                      <div className="pipeline-column__header">
+                        <h3 className="pipeline-column__title">{stage.name}</h3>
+                        <span className="pipeline-column__count">{stageVisas.length}</span>
+                      </div>
+                      <div className="pipeline-column__body">
+                        {stageVisas.map(visa => (
+                          <div key={visa.id} className="application-card">
+                            <div className="application-card__header">
+                              <h4 className="application-card__university">{visa.country} - {visa.visaType}</h4>
+                              <p className="application-card__program">Processing: {visa.expectedProcessingTime}</p>
+                            </div>
+                            <div className="application-card__meta">
+                              <span className="application-card__deadline">
+                                Fee: ${visa.fee}
+                              </span>
+                              <div className="application-card__actions">
+                                {canEdit && stage.id !== 'approved' && stage.id !== 'rejected' && (
+                                  <>
+                                    {stage.id !== 'document-prep' && (
+                                      <button 
+                                        className="card-button"
+                                        onClick={() => {
+                                          const prevStageIndex = visaStages.findIndex(s => s.id === stage.id) - 1;
+                                          if (prevStageIndex >= 0) {
+                                            moveVisaApplication(visa.id, visaStages[prevStageIndex].id);
+                                          }
+                                        }}
+                                        title="Move back"
+                                      >
+                                        ←
+                                      </button>
+                                    )}
+                                    {stage.id !== 'processing' && (
+                                      <button 
+                                        className="card-button"
+                                        onClick={() => {
+                                          const nextStageIndex = visaStages.findIndex(s => s.id === stage.id) + 1;
+                                          if (nextStageIndex < visaStages.length) {
+                                            moveVisaApplication(visa.id, visaStages[nextStageIndex].id);
+                                          }
+                                        }}
+                                        title="Move forward"
+                                      >
+                                        →
+                                      </button>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        
+                        {stageVisas.length === 0 && (
+                          <div style={{ 
+                            padding: '2rem 1rem', 
+                            textAlign: 'center', 
+                            color: 'var(--text-muted)',
+                            fontSize: '14px'
+                          }}>
+                            No visa applications in this stage
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <span className={`status-pill status-pill--${
-                      status === 'overdue' ? 'red' :
-                      status === 'urgent' ? 'orange' :
-                      status === 'upcoming' ? 'yellow' : 'blue'
-                    }`}>
-                      {deadline.status}
-                    </span>
-                  </div>
-                );
-              })}
-          </div>
-        )}
-        
-        {/* MODALS - PROPERLY PLACED AT THE END */}
-        {showNewAppModal && (
-          <NewApplicationModal 
-            onSubmit={handleNewApplication}
-            onClose={() => setShowNewAppModal(false)}
-          />
-        )}
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
-        {showNewVisaModal && (
-          <NewVisaApplicationModal 
-            onSubmit={handleNewVisaApplication}
-            onClose={() => setShowNewVisaModal(false)}
-          />
-        )}
+          {activeTab === 'documents' && (
+            <div>
+              <div className="document-checklist">
+                {documents.map(doc => (
+                  <div key={doc.id} className="document-item">
+                    <div className={`document-item__checkbox ${doc.status === 'approved' ? 'document-item__checkbox--approved' : ''}`}>
+                      {doc.status === 'approved' && <Icon name="check" size={12} />}
+                    </div>
+                    <div className="document-item__content">
+                      <h4 className="document-item__name">{doc.name}</h4>
+                    </div>
+                    <span className={`status-pill status-pill--${getStatusColor(doc.status)}`}>
+                      {doc.status.replace('-', ' ')}
+                    </span>
+                    {doc.deadline && (
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                        Due: {formatDate(doc.deadline)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'deadlines' && (
+            <div>
+              {deadlines
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .map(deadline => {
+                  const status = getDeadlineStatus(deadline.date);
+                  const daysUntil = getDaysUntilDeadline(deadline.date);
+                  
+                  return (
+                    <div key={deadline.id} className="deadline-item">
+                      <div className={`deadline-item__icon deadline-item__icon--${status}`}>
+                        <Icon name={
+                          deadline.type === 'application' ? 'document' :
+                          deadline.type === 'interview' ? 'users' :
+                          deadline.type === 'test' ? 'clipboard' :
+                          deadline.type === 'visa' ? 'globe' : 'calendar'
+                        } size={16} />
+                      </div>
+                      <div className="deadline-item__content">
+                        <h4 className="deadline-item__title">{deadline.title}</h4>
+                        <div className="deadline-item__meta">
+                          {formatDate(deadline.date)} • 
+                          {daysUntil < 0 ? ` ${Math.abs(daysUntil)} days overdue` :
+                           daysUntil === 0 ? ' Due today' :
+                           ` ${daysUntil} days remaining`} • 
+                          {deadline.type.charAt(0).toUpperCase() + deadline.type.slice(1)}
+                        </div>
+                      </div>
+                      <span className={`status-pill status-pill--${
+                        status === 'overdue' ? 'red' :
+                        status === 'urgent' ? 'orange' :
+                        status === 'upcoming' ? 'yellow' : 'blue'
+                      }`}>
+                        {deadline.status}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+          
+          {/* MODALS */}
+          {showNewAppModal && (
+            <NewApplicationModal 
+              onSubmit={handleNewApplication}
+              onClose={() => setShowNewAppModal(false)}
+            />
+          )}
+
+          {showNewVisaModal && (
+            <NewVisaApplicationModal 
+              onSubmit={handleNewVisaApplication}
+              onClose={() => setShowNewVisaModal(false)}
+            />
+          )}
+        </div>
       </div>
     </>
   );
 }
 
-// Modal Components - OUTSIDE the main component
+// Modal Components
 function NewApplicationModal({ onSubmit, onClose }) {
   const [formData, setFormData] = useState({
     university: '',

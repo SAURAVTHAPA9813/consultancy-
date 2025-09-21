@@ -20,11 +20,11 @@ export default function Layout() {
           onToggle={toggleSidebar}
         />
       </div>
-      <div className={layoutStyles['app-shell__main']}>
+      <div className={layoutStyles['app-shell__header']}>
         <Header />
-        <div className={layoutStyles['app-shell__content']}>
-          <Outlet />
-        </div>
+      </div>
+      <div className={layoutStyles['app-shell__content']}>
+        <Outlet />
       </div>
     </div>
   );

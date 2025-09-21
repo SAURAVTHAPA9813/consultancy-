@@ -9,7 +9,7 @@ import styles from '@styles/Navbar.module.css';
 
 const titles = {
   '/': 'Dashboard',
-  '/leads': 'Leads',
+  '/students': 'Students',
   '/documents': 'Documents',
   '/messages': 'Messages',
   '/admin': 'Admin',
